@@ -1,5 +1,3 @@
-# AI-Powered-Content-Transformation-Hub
-
 # AI-Powered Content Transformation Hub
 
 A modern web application for AI-powered content transformation with features like text summarization, text-to-speech, speech-to-text, and OCR.
