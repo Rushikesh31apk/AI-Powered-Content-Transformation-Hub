@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Hub - Content Transformation Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: #f0f0f0;
+            background-color: #121212;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(18, 18, 18, 0.95);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #FFC107;
+            transition: all 0.4s ease;
+        }
+        
+        .main-header.scrolled {
+            padding: 15px 40px;
+            background-color: rgba(10, 10, 10, 0.98);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-circle {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            color: #121212;
+            box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
+        }
+        
+        .logo-text {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(to right, #FFC107, #FF9800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .tagline {
+            font-size: 13px;
+            font-weight: 300;
+            color: #aaa;
+            margin-top: 3px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: #ddd;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 16px;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .nav-links a:hover {
+            color: #FFC107;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(to right, #FFC107, #FF9800);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+        
+        .cta-button {
+    background: linear-gradient(135deg, #28a745, #20c997); /* Green gradient */
+    color: #ffffff;
+    padding: 10px 25px;
+    border-radius: 10px; /* rectangular instead of full rounded */
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s;
+    width: 100px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+}
+
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.05) 100%);
+            z-index: 0;
+        }
+        
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            flex-grow: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .hero-title {
+            font-size: 64px;
+            font-weight: 900;
+            margin-bottom: 30px;
+            line-height: 1.1;
+            background: linear-gradient(to right, #FFC107, #FF9800, #FFC107);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: shimmer 3s infinite linear;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+        
+        .hero-subtitle {
+            font-size: 24px;
+            line-height: 1.6;
+            color: #ddd;
+            margin-bottom: 20px;
+            max-width: 800px;
+        }
+        
+        .hero-description {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #aaa;
+            margin-bottom: 40px;
+            max-width: 700px;
+        }
+        
+        .university-badge {
+            display: inline-block;
+            background: rgba(255, 193, 7, 0.1);
+            border: 2px solid #FFC107;
+            color: #FFC107;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .cta-button-hero {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            color: #121212;
+            padding: 18px 45px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 20px;
+            transition: all 0.4s;
+            margin-top: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button-hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        .cta-button-hero:hover:before {
+            left: 100%;
+        }
+        
+        .cta-button-hero:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 193, 7, 0.4);
+        }
+        
+        /* Dark Sections */
+        .dark-section {
+            background-color: #1a1a1a;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+        }
+
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 4rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #FFC107;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: #222;
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        .feature-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border-color: #FFC107;
+        }
+
+        .feature-card:hover:before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: #FFC107;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #FFC107;
+        }
+
+        .feature-card p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2.5rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            background: #222;
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            border: 1px solid #333;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border-color: #FFC107;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #ddd;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #1a1a1a 0%, #222 100%);
+            border-radius: 30px;
+            margin: 6rem auto;
+            max-width: 900px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border: 2px solid #FFC107;
+        }
+
+        .cta-section h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            color: #FFC107;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            color: #aaa;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-cta-primary {
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            color: #121212;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-cta-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 193, 7, 0.4);
+        }
+
+        .btn-cta-outline {
+            background: transparent;
+            color: #FFC107;
+            border: 2px solid #FFC107;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .btn-cta-outline:hover {
+            background: #FFC107;
+            color: #121212;
+            transform: translateY(-5px);
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0a0a;
+            padding: 5rem 2rem 2rem;
+            text-align: center;
+            color: white;
+            border-top: 2px solid #FFC107;
+        }
+
+        footer .logo {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #FFC107;
+        }
+
+        footer p {
+            color: #aaa;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        footer .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        footer .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        footer .footer-links a:hover {
+            color: #FFC107;
+        }
+
+        footer .copyright {
+            color: #777;
+            font-size: 0.9rem;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero-title {
+                font-size: 42px;
+            }
+            
+            .hero-subtitle {
+                font-size: 20px;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header" id="mainHeader">
+        <div class="logo-container">
+            <div class="logo-circle">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div>
+                <div class="logo-text">AI Hub</div>
+                <div class="tagline">Content Transformation Platform</div>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#stats">Statistics</a>
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}" class="cta-button">Get Started</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            
+            <h1 class="hero-title">AI-Powered Content Transformation Hub</h1>
+            <p class="hero-subtitle">Transform your content with cutting-edge AI technology - Summarization, Text-to-Speech, Speech-to-Text, and OCR</p>
+            <p class="hero-description">Experience the future of content processing with our advanced AI platform. Built for students, professionals, and researchers who need powerful tools for content transformation.</p>
+            <a href="{{ url_for('register') }}" class="cta-button-hero">
+                <i class="fas fa-rocket"></i> Start Your Free Trial
+            </a>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="dark-section">
+        <section id="features" class="section">
+            <h2 class="section-title">Platform <span class="gradient-text">Features</span></h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-file-alt"></i></div>
+                    <h3>Text Summarization</h3>
+                    <p>Transform lengthy documents into concise, meaningful summaries with our AI-powered summarization tool.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-volume-up"></i></div>
+                    <h3>Text to Speech</h3>
+                    <p>Convert any text into natural-sounding speech with multiple voice options for free and paid users.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-microphone"></i></div>
+                    <h3>Speech to Text</h3>
+                    <p>Accurately transcribe audio files into text with our advanced speech recognition technology.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-image"></i></div>
+                    <h3>OCR Technology</h3>
+                    <p>Extract text from images with precision using our Optical Character Recognition system.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section id="stats" class="section">
+            <h2 class="section-title">Platform <span class="gradient-text">Statistics</span></h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50K+</div>
+                    <div class="stat-label">Transformations</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">AI Features</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">99%</div>
+                    <div class="stat-label">Accuracy Rate</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Ready to Transform Your Content?</h2>
+            <p>Join thousands of users who are already experiencing the power of AI-driven content transformation. Get started today with our free plan!</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('register') }}" class="btn-cta-primary">
+                    <i class="fas fa-user-plus"></i> Create Free Account
+                </a>
+                <a href="{{ url_for('login') }}" class="btn-cta-outline">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="logo">
+            <i class="fas fa-robot"></i> AI Hub
+        </div>
+        <p>AI-Powered Content Transformation Platform for the Modern World</p>
+        <div class="footer-links">
+            <a href="#features">Features</a>
+            <a href="#stats">Statistics</a>
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+        </div>
+       <div class="copyright">
+    © 2026 AI-Powered Content Transformation Hub | Developed with ❤️ by Rutika Pardhi
+</div>
+
+    </footer>
+
+    <script>
+        // Header scroll effect
+        const mainHeader = document.getElementById('mainHeader');
+        
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                mainHeader.classList.add('scrolled');
+            } else {
+                mainHeader.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.feature-card, .stat-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s, transform 0.5s';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

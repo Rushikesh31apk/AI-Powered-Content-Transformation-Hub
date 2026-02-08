@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - AI Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+            background:#121212; color:#f0f0f0; min-height:100vh;
+        }
+
+        /* ─── NAVBAR ─── */
+        .top-navbar {
+            position:fixed; top:0; left:0; width:100%; z-index:1000;
+            background:rgba(18,18,18,0.95); backdrop-filter:blur(12px);
+            border-bottom:2px solid #FFC107; padding:14px 32px; display:flex; align-items:center;
+            justify-content:space-between; box-shadow:0 4px 20px rgba(0,0,0,.4);
+        }
+        .nb-left { display:flex; align-items:center; gap:12px; }
+        .nb-logo {
+            width:42px; height:42px; background:linear-gradient(135deg,#FFC107,#FF9800);
+            border-radius:50%; display:flex; align-items:center; justify-content:center;
+            font-size:18px; color:#121212; font-weight:800;
+        }
+        .nb-brand { font-size:22px; font-weight:800; background:linear-gradient(to right,#FFC107,#FF9800); -webkit-background-clip:text; background-clip:text; color:transparent; }
+        .nb-links { display:flex; gap:6px; }
+        .nb-links a {
+            color:#aaa; text-decoration:none; font-size:14px; font-weight:600;
+            padding:8px 14px; border-radius:8px; transition:all .25s;
+        }
+        .nb-links a:hover, .nb-links a.active { color:#121212; background:#FFC107; }
+        .nb-right { display:flex; align-items:center; gap:16px; }
+        .nb-profile { display:flex; align-items:center; gap:10px; }
+        .nb-avatar {
+            width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#FFC107,#FF9800);
+            display:flex; align-items:center; justify-content:center; font-size:16px; color:#121212; font-weight:700;
+            border:2px solid #333; overflow:hidden;
+        }
+        .nb-user-name { font-size:13px; font-weight:700; color:#fff; }
+        .nb-user-role { font-size:11px; color:#FFC107; }
+
+        .page-wrap { padding-top:84px; min-height:100vh; display:flex; flex-direction:column; }
+
+        /* ─── HERO ─── */
+        .page-hero {
+            background:linear-gradient(135deg, #1a1a1a 0%, #222 100%);
+            border-bottom:1px solid #2a2a2a; padding:36px 32px 32px; text-align:center; position:relative; overflow:hidden;
+        }
+        .hero-icon-wrap {
+            width:68px; height:68px; border-radius:18px; margin:0 auto 18px;
+            background:linear-gradient(135deg,rgba(255,193,7,.15),rgba(255,152,0,.15));
+            border:1px solid rgba(255,193,7,.3);
+            display:flex; align-items:center; justify-content:center;
+            font-size:28px; color:#FFC107;
+        }
+        .page-hero h1 { font-size:1.9rem; font-weight:800; color:#fff; margin-bottom:6px; }
+        .page-hero h1 span { background:linear-gradient(135deg,#FFC107,#FF9800); -webkit-background-clip:text; background-clip:text; color:transparent; }
+        .page-hero p { color:#888; font-size:.92rem; max-width:520px; margin:0 auto; }
+
+        .main-content { flex:1; padding:32px; max-width:900px; margin:0 auto; width:100%; }
+
+        /* ─── PROFILE CARD ─── */
+        .profile-card {
+            background:#1e1e1e; border:1px solid #2e2e2e; border-radius:20px;
+            overflow:hidden; margin-bottom:24px;
+        }
+        .profile-header {
+            background:linear-gradient(135deg, #1a1a1a 0%, #222 100%);
+            padding:32px 28px; text-align:center; position:relative;
+            border-bottom:1px solid #2a2a2a;
+        }
+        .profile-avatar-wrap {
+            position:relative; display:inline-block; margin-bottom:20px;
+        }
+        .profile-avatar {
+            width:120px; height:120px; border-radius:50%; object-fit:cover;
+            border:4px solid #FFC107; box-shadow:0 8px 24px rgba(255,193,7,.3);
+        }
+        .profile-avatar-placeholder {
+            width:120px; height:120px; border-radius:50%;
+            background:linear-gradient(135deg,#FFC107,#FF9800);
+            display:flex; align-items:center; justify-content:center;
+            font-size:48px; color:#121212; border:4px solid #333;
+        }
+        .avatar-edit-btn {
+            position:absolute; bottom:5px; right:5px; width:36px; height:36px;
+            background:linear-gradient(135deg,#FFC107,#FF9800); border-radius:50%;
+            border:2px solid #222; display:flex; align-items:center; justify-content:center;
+            cursor:pointer; color:#121212; font-size:14px; transition:all .25s;
+        }
+        .avatar-edit-btn:hover { transform:scale(1.1); box-shadow:0 4px 12px rgba(255,193,7,.4); }
+        .profile-name { font-size:1.8rem; font-weight:800; color:#fff; margin-bottom:6px; }
+        .profile-email { font-size:.9rem; color:#888; margin-bottom:12px; }
+        .profile-role-badge {
+            display:inline-block; padding:6px 16px; border-radius:50px;
+            font-size:.8rem; font-weight:700; margin-top:8px;
+        }
+        .badge-free { background:rgba(100,100,100,.2); color:#999; border:1px solid #555; }
+        .badge-paid { background:linear-gradient(135deg,#FFC107,#FF9800); color:#121212; border:none; }
+
+        /* ─── INFO SECTION ─── */
+        .info-section {
+            padding:28px;
+        }
+        .section-title {
+            font-size:1.05rem; font-weight:700; color:#FFC107; margin-bottom:20px;
+            display:flex; align-items:center; gap:10px;
+        }
+        .section-title i { font-size:18px; }
+        .info-grid { display:grid; gap:16px; }
+        .info-item {
+            background:#161616; border:1px solid #2a2a2a; border-radius:12px;
+            padding:18px 20px; display:flex; align-items:center; gap:16px;
+            transition:all .3s;
+        }
+        .info-item:hover { border-color:rgba(255,193,7,.3); background:#1a1a1a; }
+        .info-icon {
+            width:42px; height:42px; min-width:42px; border-radius:10px;
+            background:linear-gradient(135deg,rgba(255,193,7,.15),rgba(255,152,0,.15));
+            border:1px solid rgba(255,193,7,.2);
+            display:flex; align-items:center; justify-content:center;
+            color:#FFC107; font-size:18px;
+        }
+        .info-content { flex:1; }
+        .info-label { font-size:.78rem; color:#666; margin-bottom:4px; text-transform:uppercase; letter-spacing:.5px; }
+        .info-value { font-size:.95rem; font-weight:600; color:#eee; }
+
+        /* ─── STATS CARDS ─── */
+        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:16px; margin-bottom:24px; }
+        .stat-card {
+            background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px;
+            padding:20px 16px; text-align:center; transition:all .3s;
+        }
+        .stat-card:hover { border-color:#FFC107; transform:translateY(-4px); box-shadow:0 8px 20px rgba(0,0,0,.3); }
+        .stat-number { font-size:1.8rem; font-weight:900; background:linear-gradient(135deg,#FFC107,#FF9800); -webkit-background-clip:text; background-clip:text; color:transparent; margin-bottom:6px; }
+        .stat-label { font-size:.8rem; color:#888; }
+
+        /* ─── UPGRADE BOX ─── */
+        .upgrade-card {
+            background:linear-gradient(135deg, #1a1a1a 0%, #222 100%);
+            border:2px solid #FFC107; border-radius:16px; padding:28px;
+            text-align:center; position:relative; overflow:hidden;
+        }
+        .upgrade-card::before {
+            content:''; position:absolute; width:200px; height:200px; border-radius:50%;
+            background:radial-gradient(circle, rgba(255,193,7,.08) 0%, transparent 70%);
+            top:-100px; right:-100px;
+        }
+        .upgrade-card h3 { font-size:1.5rem; font-weight:800; color:#FFC107; margin-bottom:12px; position:relative; z-index:1; }
+        .upgrade-card p { color:#aaa; margin-bottom:24px; position:relative; z-index:1; }
+        .upgrade-features {
+            display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:24px; position:relative; z-index:1;
+        }
+        .feature-tag {
+            background:rgba(255,193,7,.1); border:1px solid rgba(255,193,7,.3);
+            color:#FFC107; padding:6px 14px; border-radius:50px; font-size:.8rem; font-weight:600;
+        }
+        .btn-upgrade {
+            background:linear-gradient(135deg,#FFC107,#FF9800); color:#121212;
+            border:none; padding:12px 32px; border-radius:10px; font-weight:700;
+            font-size:.95rem; cursor:pointer; transition:all .3s; position:relative; z-index:1;
+        }
+        .btn-upgrade:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(255,193,7,.4); }
+
+        /* ─── ACTION BUTTONS ─── */
+        .action-btns {
+            display:flex; gap:12px; justify-content:center; margin-top:24px; flex-wrap:wrap;
+        }
+        .btn-action {
+            background:#2a2a2a; color:#999; border:1px solid #3a3a3a;
+            padding:10px 24px; border-radius:8px; font-size:.85rem; font-weight:600;
+            cursor:pointer; transition:all .25s; display:flex; align-items:center; gap:8px;
+            text-decoration:none;
+        }
+        .btn-action:hover { border-color:#FFC107; color:#FFC107; }
+        .btn-logout { border-color:#ff5722; color:#ff5722; }
+        .btn-logout:hover { background:#ff5722; color:#fff; }
+
+        .dash-footer {
+            background:#0a0a0a; border-top:2px solid #FFC107;
+            padding:24px 32px; text-align:center; margin-top:auto;
+        }
+        .dash-footer p { color:#777; font-size:.78rem; margin:2px 0; }
+        .dash-footer .f-highlight { color:#FFC107; font-weight:600; }
+
+        /* ─── EDIT MODAL ─── */
+        .modal-overlay {
+            position:fixed; inset:0; background:rgba(0,0,0,.85); display:none;
+            align-items:center; justify-content:center; z-index:2000; padding:20px;
+        }
+        .modal-overlay.active { display:flex; }
+        .modal-content {
+            background:#222; border:2px solid #FFC107; border-radius:16px;
+            padding:32px; max-width:500px; width:100%; max-height:90vh; overflow-y:auto;
+        }
+        .modal-header { margin-bottom:24px; }
+        .modal-header h3 { color:#FFC107; font-size:1.4rem; font-weight:800; margin-bottom:6px; }
+        .modal-header p { color:#888; font-size:.85rem; }
+        .form-group { margin-bottom:18px; }
+        .form-label { color:#ddd; font-size:.85rem; font-weight:600; margin-bottom:8px; display:block; }
+        .form-input {
+            width:100%; background:#161616; border:1px solid #333; color:#ddd;
+            padding:12px 14px; border-radius:8px; font-size:.9rem; transition:all .25s;
+        }
+        .form-input:focus { border-color:#FFC107; box-shadow:0 0 0 3px rgba(255,193,7,.1); outline:none; }
+        .modal-actions { display:flex; gap:12px; margin-top:24px; }
+        .btn-save {
+            flex:1; background:linear-gradient(135deg,#FFC107,#FF9800); color:#121212;
+            border:none; padding:12px; border-radius:8px; font-weight:700; cursor:pointer;
+        }
+        .btn-save:hover { box-shadow:0 6px 18px rgba(255,193,7,.4); }
+        .btn-cancel {
+            flex:1; background:#2a2a2a; color:#999; border:1px solid #3a3a3a;
+            padding:12px; border-radius:8px; font-weight:600; cursor:pointer;
+        }
+        .btn-cancel:hover { border-color:#FFC107; color:#FFC107; }
+
+        @media(max-width:768px){
+            .main-content { padding:24px 18px; }
+            .top-navbar { padding:12px 16px; }
+            .nb-links { display:none; }
+            .stats-grid { grid-template-columns:repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="top-navbar">
+    <div class="nb-left">
+        <a href="{{ url_for('dashboard') }}" style="text-decoration:none;display:flex;align-items:center;gap:12px;">
+            <div class="nb-logo"><i class="fas fa-robot"></i></div>
+            <span class="nb-brand">AI Hub</span>
+        </a>
+    </div>
+    <div class="nb-links">
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('summarize') }}">Summarize</a>
+        <a href="{{ url_for('tts') }}">Text to Speech</a>
+        <a href="{{ url_for('stt') }}">Speech to Text</a>
+        <a href="{{ url_for('ocr') }}">OCR</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+    </div>
+    <div class="nb-right">
+        <div class="nb-profile">
+            <div class="nb-avatar">
+                {% if session.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' + session.profile_image) }}" style="width:100%;height:100%;object-fit:cover;" alt="">
+                {% else %}
+                    {{ session.user_name[0]|upper }}
+                {% endif %}
+            </div>
+            <div>
+                <div class="nb-user-name">{{ session.user_name }}</div>
+                <div class="nb-user-role">{{ session.user_role }}</div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="page-wrap">
+
+<div class="page-hero">
+    <div class="hero-icon-wrap"><i class="fas fa-user-circle"></i></div>
+    <h1>My <span>Profile</span></h1>
+    <p>Manage your account settings and preferences</p>
+</div>
+
+<div class="main-content">
+
+    <!-- STATS -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Summaries</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Audio Clips</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Transcripts</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">0</div>
+            <div class="stat-label">OCR Scans</div>
+        </div>
+    </div>
+
+    <!-- PROFILE CARD -->
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="profile-avatar-wrap">
+                {% if user['profile_image'] %}
+                    <img src="{{ url_for('static', filename='uploads/' + user['profile_image']) }}" class="profile-avatar" alt="Profile">
+                {% else %}
+                    <div class="profile-avatar-placeholder">
+                        <i class="fas fa-user"></i>
+                    </div>
+                {% endif %}
+                <div class="avatar-edit-btn" onclick="alert('Profile picture upload coming soon!')">
+                    <i class="fas fa-camera"></i>
+                </div>
+            </div>
+            <div class="profile-name">{{ user['name'] }}</div>
+            <div class="profile-email">{{ user['email'] }}</div>
+            <div class="profile-role-badge {{ 'badge-paid' if user['role'] == 'Paid User' else 'badge-free' }}">
+                <i class="fas fa-{{ 'gem' if user['role'] == 'Paid User' else 'star' }}"></i> {{ user['role'] }}
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="section-title">
+                <i class="fas fa-info-circle"></i> Account Information
+            </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-user"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Full Name</div>
+                        <div class="info-value">{{ user['name'] }}</div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Email Address</div>
+                        <div class="info-value">{{ user['email'] }}</div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-calendar"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Member Since</div>
+                        <div class="info-value">{{ user['created_at'][:10] }}</div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-shield-halved"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Account Status</div>
+                        <div class="info-value" style="color:#4caf50;">Active</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPGRADE BOX (Free Users Only) -->
+    {% if user['role'] == 'Free User' %}
+    <div class="upgrade-card">
+        <h3><i class="fas fa-rocket"></i> Upgrade to Premium</h3>
+        <p>Unlock all premium features and take your content transformation to the next level</p>
+        <div class="upgrade-features">
+            <span class="feature-tag"><i class="fas fa-check"></i> 4 Premium Voices</span>
+            <span class="feature-tag"><i class="fas fa-check"></i> Priority Processing</span>
+            <span class="feature-tag"><i class="fas fa-check"></i> Advanced Features</span>
+            <span class="feature-tag"><i class="fas fa-check"></i> Email Support</span>
+        </div>
+        <button class="btn-upgrade" onclick="alert('Upgrade feature coming soon! Contact admin@aihub.edu')">
+            <i class="fas fa-crown"></i> Upgrade Now - Only $9.99/month
+        </button>
+    </div>
+    {% endif %}
+
+    <!-- ACTION BUTTONS -->
+    <div class="action-btns">
+        <button class="btn-action" onclick="openEditModal()">
+            <i class="fas fa-edit"></i> Edit Profile
+        </button>
+        <a href="{{ url_for('dashboard') }}" class="btn-action">
+            <i class="fas fa-th-large"></i> Go to Dashboard
+        </a>
+        <a href="{{ url_for('logout') }}" class="btn-action btn-logout">
+            <i class="fas fa-right-from-bracket"></i> Logout
+        </a>
+    </div>
+</div>
+
+</div>
+
+<footer class="dash-footer">
+    <p><span class="f-highlight">© 2025 AI-Powered Content Transformation Hub</span></p>
+    <p>Savitribai Phule Pune University</p>
+</footer>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-user-edit"></i> Edit Profile</h3>
+            <p>Update your account information</p>
+        </div>
+        <form method="POST" action="{{ url_for('update_profile') }}">
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-input" name="name" value="{{ user['name'] }}" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" name="email" value="{{ user['email'] }}" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">New Password (leave blank to keep current)</label>
+                <input type="password" class="form-input" name="new_password" placeholder="Enter new password">
+            </div>
+            <div class="modal-actions">
+                <button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Changes</button>
+                <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openEditModal() {
+    document.getElementById('editModal').classList.add('active');
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').classList.remove('active');
+}
+
+// Close modal on outside click
+document.getElementById('editModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeEditModal();
+});
+</script>
+</body>
+</html>

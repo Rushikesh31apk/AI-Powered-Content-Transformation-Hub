@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR - AI Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+            background:#121212; color:#f0f0f0; min-height:100vh;
+        }
+
+        /* ─── NAVBAR ─── */
+        .top-navbar {
+            position:fixed; top:0; left:0; width:100%; z-index:1000;
+            background:rgba(18,18,18,0.95); backdrop-filter:blur(12px);
+            border-bottom:2px solid #FFC107;
+            padding:14px 32px; display:flex; align-items:center;
+            justify-content:space-between; transition:padding .3s;
+            box-shadow:0 4px 20px rgba(0,0,0,.4);
+        }
+        .nb-left { display:flex; align-items:center; gap:12px; }
+        .nb-logo {
+            width:42px; height:42px;
+            background:linear-gradient(135deg,#FFC107,#FF9800);
+            border-radius:50%; display:flex; align-items:center; justify-content:center;
+            font-size:18px; color:#121212; font-weight:800;
+        }
+        .nb-brand { font-size:22px; font-weight:800; background:linear-gradient(to right,#FFC107,#FF9800); -webkit-background-clip:text; background-clip:text; color:transparent; }
+        .nb-links { display:flex; gap:6px; }
+        .nb-links a {
+            color:#aaa; text-decoration:none; font-size:14px; font-weight:600;
+            padding:8px 14px; border-radius:8px; transition:all .25s;
+        }
+        .nb-links a:hover, .nb-links a.active { color:#121212; background:#FFC107; }
+        .nb-right { display:flex; align-items:center; gap:16px; }
+        .nb-profile { display:flex; align-items:center; gap:10px; }
+        .nb-avatar {
+            width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#FFC107,#FF9800);
+            display:flex; align-items:center; justify-content:center; font-size:16px; color:#121212; font-weight:700;
+            border:2px solid #333; overflow:hidden;
+        }
+        .nb-user-name { font-size:13px; font-weight:700; color:#fff; }
+        .nb-user-role { font-size:11px; color:#FFC107; }
+
+        .page-wrap { padding-top:84px; min-height:100vh; display:flex; flex-direction:column; }
+
+        /* ─── HERO ─── */
+        .page-hero {
+            background:linear-gradient(135deg, #1a1a1a 0%, #222 100%);
+            border-bottom:1px solid #2a2a2a; padding:36px 32px 32px; text-align:center; position:relative; overflow:hidden;
+        }
+        .hero-icon-wrap {
+            width:68px; height:68px; border-radius:18px; margin:0 auto 18px;
+            background:linear-gradient(135deg,rgba(255,193,7,.15),rgba(255,152,0,.15));
+            border:1px solid rgba(255,193,7,.3);
+            display:flex; align-items:center; justify-content:center;
+            font-size:28px; color:#FFC107;
+        }
+        .page-hero h1 { font-size:1.9rem; font-weight:800; color:#fff; margin-bottom:6px; }
+        .page-hero h1 span { background:linear-gradient(135deg,#FFC107,#FF9800); -webkit-background-clip:text; background-clip:text; color:transparent; }
+        .page-hero p { color:#888; font-size:.92rem; max-width:520px; margin:0 auto; }
+
+        .main-content { flex:1; padding:32px; max-width:1200px; margin:0 auto; width:100%; }
+        .content-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+
+        /* ─── BOXES ─── */
+        .box {
+            background:#1e1e1e; border:1px solid #2e2e2e; border-radius:16px;
+            overflow:hidden; transition:border-color .3s;
+        }
+        .box:hover { border-color:rgba(255,193,7,.3); }
+        .box-header {
+            padding:16px 22px; border-bottom:1px solid #2a2a2a;
+            display:flex; align-items:center; justify-content:space-between; background:#222;
+        }
+        .box-header-left { display:flex; align-items:center; gap:10px; }
+        .box-header-left i { color:#FFC107; font-size:16px; }
+        .box-header-left h5 { margin:0; font-size:.92rem; font-weight:700; color:#eee; }
+        .box-badge {
+            font-size:.7rem; font-weight:700; padding:3px 10px; border-radius:50px;
+            background:rgba(255,193,7,.12); color:#FFC107; border:1px solid rgba(255,193,7,.25);
+        }
+        .box-body { padding:20px 22px; }
+
+        /* ─── UPLOAD ZONE ─── */
+        .upload-zone {
+            border:2px dashed #333; border-radius:12px; padding:40px 20px;
+            text-align:center; cursor:pointer; transition:all .3s; background:#161616;
+        }
+        .upload-zone:hover { border-color:#FFC107; background:#1a1a1a; }
+        .upload-zone.dragover { border-color:#FFC107; background:rgba(255,193,7,.05); }
+        .upload-icon {
+            width:64px; height:64px; border-radius:16px; margin:0 auto 16px;
+            background:linear-gradient(135deg,rgba(255,193,7,.12),rgba(255,152,0,.12));
+            border:1px solid rgba(255,193,7,.2);
+            display:flex; align-items:center; justify-content:center;
+            font-size:28px; color:#FFC107;
+        }
+        .upload-zone h6 { font-size:1rem; font-weight:700; color:#eee; margin-bottom:6px; }
+        .upload-zone p { font-size:.82rem; color:#666; margin-bottom:14px; }
+        .btn-browse {
+            background:linear-gradient(135deg,#FFC107,#FF9800); color:#121212;
+            border:none; padding:9px 24px; border-radius:8px; font-weight:700;
+            font-size:.85rem; cursor:pointer; transition:all .25s;
+        }
+        .btn-browse:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(255,193,7,.35); }
+
+        /* ─── IMAGE PREVIEW ─── */
+        .image-preview {
+            background:#161616; border:1px solid #2a2a2a; border-radius:10px;
+            padding:14px; margin-top:16px; display:none;
+        }
+        .preview-img {
+            width:100%; border-radius:8px; margin-bottom:12px;
+            max-height:300px; object-fit:contain; background:#0a0a0a;
+        }
+        .preview-info { display:flex; justify-content:space-between; align-items:center; }
+        .preview-name { font-size:.88rem; font-weight:700; color:#eee; }
+        .btn-remove {
+            background:transparent; border:1px solid #3a3a3a; color:#999;
+            padding:6px 12px; border-radius:6px; font-size:.75rem; cursor:pointer;
+        }
+        .btn-remove:hover { border-color:#ff5722; color:#ff5722; }
+
+        .btn-extract {
+            background:linear-gradient(135deg,#FFC107,#FF9800); color:#121212;
+            border:none; padding:11px 28px; border-radius:10px; font-weight:700;
+            font-size:.9rem; cursor:pointer; transition:all .25s; display:flex;
+            align-items:center; gap:8px; width:100%; justify-content:center; margin-top:16px;
+        }
+        .btn-extract:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(255,193,7,.35); }
+        .btn-extract:disabled { opacity:.5; cursor:not-allowed; }
+
+        /* ─── OUTPUT ─── */
+        .output-textarea {
+            width:100%; background:#161616; border:1px solid #2a2a2a; color:#ddd;
+            border-radius:10px; padding:16px; font-size:.9rem; line-height:1.8;
+            resize:vertical; min-height:250px; font-family:inherit;
+        }
+
+        .action-btns { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+        .btn-action {
+            background:#2a2a2a; color:#999; border:1px solid #3a3a3a;
+            padding:9px 18px; border-radius:8px; font-size:.82rem; font-weight:600;
+            cursor:pointer; transition:all .25s; display:flex; align-items:center; gap:8px;
+        }
+        .btn-action:hover { border-color:#FFC107; color:#FFC107; }
+        .btn-action.copied { border-color:#4caf50; color:#4caf50; }
+
+        .stats-row { display:flex; gap:14px; margin-top:14px; flex-wrap:wrap; }
+        .stat-box {
+            background:#161616; border:1px solid #2a2a2a; border-radius:8px;
+            padding:10px 16px; display:flex; align-items:center; gap:10px;
+        }
+        .stat-box i { color:#FFC107; font-size:14px; }
+        .stat-box span { font-size:.78rem; color:#888; }
+        .stat-box strong { color:#eee; font-size:.85rem; }
+
+        .loading-overlay {
+            position:fixed; inset:0; background:rgba(0,0,0,.8);
+            display:none; align-items:center; justify-content:center; z-index:3000;
+        }
+        .loading-overlay.active { display:flex; }
+        .loading-content {
+            background:#222; border:2px solid #FFC107; border-radius:16px;
+            padding:32px 48px; text-align:center;
+        }
+        .spinner {
+            width:48px; height:48px; border:4px solid #333;
+            border-top-color:#FFC107; border-radius:50%;
+            animation:spin 1s linear infinite; margin:0 auto 16px;
+        }
+        @keyframes spin { to { transform:rotate(360deg); } }
+
+        .tips-strip { display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; }
+        .tip-pill {
+            background:#1a1a1a; border:1px solid #2e2e2e; border-radius:50px;
+            padding:7px 14px; font-size:.76rem; color:#777; display:flex; align-items:center; gap:7px;
+        }
+        .tip-pill i { color:#FFC107; font-size:11px; }
+
+        .dash-footer {
+            background:#0a0a0a; border-top:2px solid #FFC107;
+            padding:24px 32px; text-align:center; margin-top:auto;
+        }
+        .dash-footer p { color:#777; font-size:.78rem; margin:2px 0; }
+        .dash-footer .f-highlight { color:#FFC107; font-weight:600; }
+
+        @media(max-width:900px){
+            .content-grid { grid-template-columns:1fr; }
+        }
+        @media(max-width:768px){
+            .main-content { padding:24px 18px; }
+            .top-navbar { padding:12px 16px; }
+            .nb-links a { padding:6px 10px; font-size:12px; }
+        }
+        @media(max-width:480px){
+            .nb-links { display:none; }
+            .page-hero { padding:28px 18px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="top-navbar">
+    <div class="nb-left">
+        <a href="{{ url_for('dashboard') }}" style="text-decoration:none;display:flex;align-items:center;gap:12px;">
+            <div class="nb-logo"><i class="fas fa-robot"></i></div>
+            <span class="nb-brand">AI Hub</span>
+        </a>
+    </div>
+    <div class="nb-links">
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('summarize') }}">Summarize</a>
+        <a href="{{ url_for('tts') }}">Text to Speech</a>
+        <a href="{{ url_for('stt') }}">Speech to Text</a>
+        <a href="{{ url_for('ocr') }}" class="active">OCR</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+    </div>
+    <div class="nb-right">
+        <div class="nb-profile">
+            <div class="nb-avatar">
+                {% if session.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' + session.profile_image) }}" style="width:100%;height:100%;object-fit:cover;" alt="">
+                {% else %}
+                    {{ session.user_name[0]|upper }}
+                {% endif %}
+            </div>
+            <div>
+                <div class="nb-user-name">{{ session.user_name }}</div>
+                <div class="nb-user-role">{{ session.user_role }}</div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="page-wrap">
+
+<div class="page-hero">
+    <div class="hero-icon-wrap"><i class="fas fa-image"></i></div>
+    <h1><span>OCR</span> - Optical Character Recognition</h1>
+    <p>Extract text from images instantly with AI-powered OCR technology</p>
+</div>
+
+<div class="main-content">
+    <form method="POST" action="{{ url_for('ocr') }}" enctype="multipart/form-data" id="ocrForm">
+        <div class="content-grid">
+            <!-- INPUT SIDE -->
+            <div class="box">
+                <div class="box-header">
+                    <div class="box-header-left">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h5>Upload Image</h5>
+                    </div>
+                    <span class="box-badge">INPUT</span>
+                </div>
+                <div class="box-body">
+                    <div class="upload-zone" id="uploadZone">
+                        <div class="upload-icon"><i class="fas fa-file-image"></i></div>
+                        <h6>Drag & Drop Image</h6>
+                        <p>or click to browse from your device</p>
+                        <button type="button" class="btn-browse" onclick="document.getElementById('imageFile').click()">
+                            <i class="fas fa-folder-open"></i> Browse Files
+                        </button>
+                        <input type="file" style="display:none;" id="imageFile" name="image_file" accept="image/*">
+                        <small style="display:block;margin-top:10px;color:#555;font-size:.75rem;">JPG, PNG, JPEG, GIF, BMP • Max 10MB</small>
+                    </div>
+
+                    <div class="image-preview" id="imagePreview">
+                        <img id="previewImg" class="preview-img" alt="Preview">
+                        <div class="preview-info">
+                            <span class="preview-name" id="imgName">image.jpg</span>
+                            <button type="button" class="btn-remove" onclick="removeImage()">
+                                <i class="fas fa-times"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-extract" id="btnExtract" disabled>
+                        <i class="fas fa-wand-magic-sparkles"></i> Extract Text
+                    </button>
+                </div>
+            </div>
+
+            <!-- OUTPUT SIDE -->
+            <div class="box">
+                <div class="box-header">
+                    <div class="box-header-left">
+                        <i class="fas fa-{{ 'check-circle' if extracted_text else 'file-alt' }}" style="color:'#4caf50' if extracted_text else '#FFC107'"></i>
+                        <h5>Extracted Text</h5>
+                    </div>
+                    <span class="box-badge" style="background:rgba(76,175,80,.12);color:#4caf50;border-color:rgba(76,175,80,.25);">
+                        {{ 'READY' if extracted_text else 'OUTPUT' }}
+                    </span>
+                </div>
+                <div class="box-body">
+                    <textarea class="output-textarea" id="outputText" readonly placeholder="Extracted text will appear here after processing...">{{ extracted_text or '' }}</textarea>
+                    {% if extracted_text %}
+                    <div class="action-btns">
+                        <button class="btn-action" id="copyBtn" onclick="copyText(event)">
+                            <i class="fas fa-copy"></i> Copy Text
+                        </button>
+                        <button class="btn-action" onclick="downloadText(event)">
+                            <i class="fas fa-download"></i> Download TXT
+                        </button>
+                    </div>
+                    <div class="stats-row">
+                        <div class="stat-box">
+                            <i class="fas fa-font"></i>
+                            <span>Words: <strong>{{ extracted_text.split()|length }}</strong></span>
+                        </div>
+                        <div class="stat-box">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Characters: <strong>{{ extracted_text|length }}</strong></span>
+                        </div>
+                        <div class="stat-box">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Status: <strong>Complete</strong></span>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="tips-strip">
+        <div class="tip-pill"><i class="fas fa-check"></i> High contrast images work best</div>
+        <div class="tip-pill"><i class="fas fa-check"></i> Avoid blurry or skewed photos</div>
+        <div class="tip-pill"><i class="fas fa-check"></i> Supports multiple languages</div>
+        <div class="tip-pill"><i class="fas fa-check"></i> Instant processing</div>
+    </div>
+</div>
+
+</div>
+
+<footer class="dash-footer">
+    <p><span class="f-highlight">© 2025 AI-Powered Content Transformation Hub</span></p>
+    <p>Savitribai Phule Pune University</p>
+</footer>
+
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+        <div class="spinner"></div>
+        <p>Extracting text from image...</p>
+    </div>
+</div>
+
+<script>
+const fileInput = document.getElementById('imageFile');
+const uploadZone = document.getElementById('uploadZone');
+const imagePreview = document.getElementById('imagePreview');
+const btnExtract = document.getElementById('btnExtract');
+const form = document.getElementById('ocrForm');
+
+fileInput.addEventListener('change', handleFile);
+
+uploadZone.addEventListener('click', (e) => {
+    if (e.target.tagName !== 'BUTTON') fileInput.click();
+});
+
+uploadZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadZone.classList.add('dragover');
+});
+
+uploadZone.addEventListener('dragleave', () => {
+    uploadZone.classList.remove('dragover');
+});
+
+uploadZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        handleFile();
+    }
+});
+
+function handleFile() {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        document.getElementById('previewImg').src = e.target.result;
+        document.getElementById('imgName').textContent = file.name;
+        uploadZone.style.display = 'none';
+        imagePreview.style.display = 'block';
+        btnExtract.disabled = false;
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeImage() {
+    fileInput.value = '';
+    uploadZone.style.display = 'block';
+    imagePreview.style.display = 'none';
+    btnExtract.disabled = true;
+}
+
+form.addEventListener('submit', () => {
+    document.getElementById('loadingOverlay').classList.add('active');
+});
+
+function copyText(e) {
+    e.preventDefault();
+    const out = document.getElementById('outputText');
+    out.select();
+    document.execCommand('copy');
+    const btn = document.getElementById('copyBtn');
+    btn.classList.add('copied');
+    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<i class="fas fa-copy"></i> Copy Text';
+    }, 1800);
+}
+
+function downloadText(e) {
+    e.preventDefault();
+    const text = document.getElementById('outputText').value;
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ocr_result.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

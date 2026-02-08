@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarization - AI Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+            background:#121212; color:#f0f0f0; min-height:100vh;
+        }
+
+        /* ─── NAVBAR (same as dashboard) ─── */
+        .top-navbar {
+            position:fixed; top:0; left:0; width:100%; z-index:1000;
+            background:rgba(18,18,18,0.95); backdrop-filter:blur(12px);
+            border-bottom:2px solid #FFC107;
+            padding:14px 32px; display:flex; align-items:center;
+            justify-content:space-between; transition:padding .3s;
+            box-shadow:0 4px 20px rgba(0,0,0,.4);
+        }
+        .top-navbar.scrolled { padding:10px 32px; }
+        .nb-left { display:flex; align-items:center; gap:12px; }
+        .nb-logo {
+            width:42px; height:42px;
+            background:linear-gradient(135deg,#FFC107,#FF9800);
+            border-radius:50%; display:flex; align-items:center; justify-content:center;
+            font-size:18px; color:#121212; font-weight:800;
+            box-shadow:0 4px 12px rgba(255,193,7,.3);
+        }
+        .nb-brand { font-size:22px; font-weight:800; background:linear-gradient(to right,#FFC107,#FF9800); -webkit-background-clip:text; background-clip:text; color:transparent; }
+        .nb-links { display:flex; gap:6px; }
+        .nb-links a {
+            color:#aaa; text-decoration:none; font-size:14px; font-weight:600;
+            padding:8px 14px; border-radius:8px; transition:all .25s;
+        }
+        .nb-links a:hover, .nb-links a.active { color:#121212; background:#FFC107; }
+        .nb-right { display:flex; align-items:center; gap:16px; }
+        .nb-profile { display:flex; align-items:center; gap:10px; cursor:pointer; }
+        .nb-avatar {
+            width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#FFC107,#FF9800);
+            display:flex; align-items:center; justify-content:center; font-size:16px; color:#121212; font-weight:700;
+            border:2px solid #333; overflow:hidden;
+        }
+        .nb-user-info { text-align:left; }
+        .nb-user-name { font-size:13px; font-weight:700; color:#fff; }
+        .nb-user-role { font-size:11px; color:#FFC107; }
+
+        /* ─── PAGE LAYOUT ─── */
+        .page-wrap { padding-top:84px; min-height:100vh; display:flex; flex-direction:column; }
+
+        /* ─── HERO HEADER ─── */
+        .page-hero {
+            background:linear-gradient(135deg, #1a1a1a 0%, #222 100%);
+            border-bottom:1px solid #2a2a2a;
+            padding:36px 32px 32px; text-align:center; position:relative; overflow:hidden;
+        }
+        .page-hero::before {
+            content:''; position:absolute; top:-60px; right:-60px;
+            width:200px; height:200px; border-radius:50%;
+            background:radial-gradient(circle, rgba(255,193,7,.08) 0%, transparent 70%);
+        }
+        .page-hero::after {
+            content:''; position:absolute; bottom:-40px; left:-40px;
+            width:150px; height:150px; border-radius:50%;
+            background:radial-gradient(circle, rgba(255,152,0,.06) 0%, transparent 70%);
+        }
+        .hero-icon-wrap {
+            width:68px; height:68px; border-radius:18px; margin:0 auto 18px;
+            background:linear-gradient(135deg,rgba(255,193,7,.15),rgba(255,152,0,.15));
+            border:1px solid rgba(255,193,7,.3);
+            display:flex; align-items:center; justify-content:center;
+            font-size:28px; color:#FFC107; position:relative; z-index:1;
+        }
+        .page-hero h1 { font-size:1.9rem; font-weight:800; color:#fff; position:relative; z-index:1; margin-bottom:6px; }
+        .page-hero h1 span { background:linear-gradient(135deg,#FFC107,#FF9800); -webkit-background-clip:text; background-clip:text; color:transparent; }
+        .page-hero p { color:#888; font-size:.92rem; position:relative; z-index:1; max-width:520px; margin:0 auto; }
+
+        /* ─── MAIN CONTENT ─── */
+        .main-content { flex:1; padding:32px; max-width:900px; margin:0 auto; width:100%; }
+        
+        /* ─── CARD BOXES ─── */
+        .box {
+            background:#1e1e1e; border:1px solid #2e2e2e; border-radius:16px;
+            overflow:hidden; transition:border-color .3s; margin-bottom:24px;
+        }
+        .box:hover { border-color:rgba(255,193,7,.3); }
+        .box-header {
+            padding:16px 22px; border-bottom:1px solid #2a2a2a;
+            display:flex; align-items:center; justify-content:space-between;
+            background:#222;
+        }
+        .box-header-left { display:flex; align-items:center; gap:10px; }
+        .box-header-left i { color:#FFC107; font-size:16px; }
+        .box-header-left h5 { margin:0; font-size:.92rem; font-weight:700; color:#eee; }
+        .box-badge {
+            font-size:.7rem; font-weight:700; padding:3px 10px; border-radius:50px;
+            background:rgba(255,193,7,.12); color:#FFC107; border:1px solid rgba(255,193,7,.25);
+        }
+        .box-body { padding:20px 22px; }
+
+        /* ─── TEXTAREA ─── */
+        .styled-textarea {
+            width:100%; background:#161616; border:1px solid #333; color:#ddd;
+            border-radius:10px; padding:14px 16px; font-size:.9rem; line-height:1.7;
+            resize:vertical; min-height:240px; font-family:inherit;
+            transition:all .25s; outline:none;
+        }
+        .styled-textarea:focus { border-color:#FFC107; box-shadow:0 0 0 3px rgba(255,193,7,.1); }
+        .styled-textarea::placeholder { color:#555; }
+
+        /* ─── CONTROLS ROW ─── */
+        .controls-row { display:flex; align-items:center; justify-content:space-between; margin-top:16px; flex-wrap:wrap; gap:12px; }
+        .char-count { font-size:.78rem; color:#666; }
+        .char-count span { color:#FFC107; font-weight:700; }
+
+        /* ─── BUTTONS ─── */
+        .btn-generate {
+            background:linear-gradient(135deg,#FFC107,#FF9800); color:#121212;
+            border:none; padding:11px 28px; border-radius:10px; font-weight:700;
+            font-size:.9rem; cursor:pointer; transition:all .25s; display:flex;
+            align-items:center; gap:8px;
+        }
+        .btn-generate:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(255,193,7,.35); }
+        .btn-generate:active { transform:translateY(0); }
+        .btn-generate i { font-size:14px; }
+        .btn-clear {
+            background:#2a2a2a; color:#999; border:1px solid #3a3a3a;
+            padding:9px 18px; border-radius:10px; font-size:.82rem; font-weight:600;
+            cursor:pointer; transition:all .25s;
+        }
+        .btn-clear:hover { border-color:#FFC107; color:#FFC107; }
+        .btn-copy {
+            background:#2a2a2a; color:#999; border:1px solid #3a3a3a;
+            padding:7px 14px; border-radius:8px; font-size:.78rem; font-weight:600;
+            cursor:pointer; transition:all .25s; display:flex; align-items:center; gap:6px;
+        }
+        .btn-copy:hover { border-color:#FFC107; color:#FFC107; }
+        .btn-copy.copied { border-color:#4caf50; color:#4caf50; }
+
+        /* ─── SUMMARY OUTPUT ─── */
+        .summary-text {
+            color:#ccc; font-size:.9rem; line-height:1.9; background:#161616;
+            border-radius:10px; padding:18px; border:1px solid #2a2a2a; min-height:160px;
+        }
+        .summary-stats {
+            display:flex; gap:16px; margin-top:14px; flex-wrap:wrap;
+            background:#1a1a1a; padding:12px 18px; border-radius:10px;
+            border:1px solid #2a2a2a;
+        }
+        .s-stat {
+            background:#161616; border:1px solid #2e2e2e; border-radius:8px;
+            padding:8px 14px; display:flex; align-items:center; gap:8px;
+            flex:1; min-width:120px;
+        }
+        .s-stat i { color:#FFC107; font-size:13px; }
+        .s-stat span { font-size:.78rem; color:#888; }
+        .s-stat strong { color:#eee; font-size:.82rem; }
+
+        /* ─── LOADING SPINNER ─── */
+        .loading-spinner {
+            display:none; text-align:center; padding:40px 20px;
+        }
+        .spinner {
+            width:40px; height:40px; border:3px solid rgba(255,193,7,.1);
+            border-top-color:#FFC107; border-radius:50%; margin:0 auto 16px;
+            animation:spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform:rotate(360deg); } }
+        .loading-spinner p { color:#888; font-size:.85rem; }
+
+        /* ─── TIPS STRIP ─── */
+        .tips-strip {
+            display:flex; gap:12px; margin-top:24px; flex-wrap:wrap;
+        }
+        .tip-pill {
+            background:#1a1a1a; border:1px solid #2e2e2e; border-radius:50px;
+            padding:7px 14px; font-size:.76rem; color:#777; display:flex; align-items:center; gap:7px;
+            transition:all .25s;
+        }
+        .tip-pill:hover { border-color:rgba(255,193,7,.3); color:#aaa; }
+        .tip-pill i { color:#FFC107; font-size:11px; }
+
+        /* ─── TOAST NOTIFICATION ─── */
+        .toast-wrap { position:fixed; bottom:28px; right:28px; z-index:2000; }
+        .toast-msg {
+            background:#222; border:1px solid #FFC107; color:#fff; padding:12px 22px;
+            border-radius:10px; font-size:.85rem; font-weight:600; display:flex; align-items:center; gap:10px;
+            box-shadow:0 8px 24px rgba(0,0,0,.4); transform:translateY(80px); opacity:0;
+            transition:all .35s ease; max-width:320px;
+        }
+        .toast-msg.show { transform:translateY(0); opacity:1; }
+        .toast-msg i { color:#FFC107; font-size:16px; }
+
+        /* ─── FOOTER ─── */
+        .dash-footer {
+            background:#0a0a0a; border-top:2px solid #FFC107;
+            padding:24px 32px; text-align:center; margin-top:auto;
+        }
+        .dash-footer p { color:#777; font-size:.78rem; margin:2px 0; }
+        .dash-footer .f-highlight { color:#FFC107; font-weight:600; }
+
+        /* ─── RESPONSIVE ─── */
+        @media(max-width:800px){
+            .main-content { padding:24px 18px; }
+            .top-navbar { padding:12px 16px; }
+            .nb-links { gap:2px; }
+            .nb-links a { padding:6px 10px; font-size:12px; }
+            .summary-stats { flex-direction:column; }
+            .s-stat { min-width:100%; }
+        }
+        @media(max-width:480px){
+            .nb-links { display:none; }
+            .page-hero { padding:28px 18px 24px; }
+            .page-hero h1 { font-size:1.5rem; }
+            .btn-generate { width:100%; justify-content:center; }
+            .controls-row { justify-content:center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<nav class="top-navbar" id="topNav">
+    <div class="nb-left">
+        <a href="{{ url_for('dashboard') }}" style="text-decoration:none;display:flex;align-items:center;gap:12px;">
+            <div class="nb-logo"><i class="fas fa-robot"></i></div>
+            <span class="nb-brand">AI Hub</span>
+        </a>
+    </div>
+    <div class="nb-links">
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('summarize') }}" class="active">Summarize</a>
+        <a href="{{ url_for('tts') }}">Text to Speech</a>
+        <a href="{{ url_for('stt') }}">Speech to Text</a>
+        <a href="{{ url_for('ocr') }}">OCR</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+    </div>
+    <div class="nb-right">
+        <div class="nb-profile">
+            <div class="nb-avatar">
+                {% if session.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' + session.profile_image) }}" style="width:100%;height:100%;object-fit:cover;" alt="">
+                {% else %}
+                    {{ session.user_name[0]|upper }}
+                {% endif %}
+            </div>
+            <div class="nb-user-info">
+                <div class="nb-user-name">{{ session.user_name }}</div>
+                <div class="nb-user-role">{{ session.user_role }}</div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="page-wrap">
+
+<!-- ═══════════ PAGE HERO ═══════════ -->
+<div class="page-hero">
+    <div class="hero-icon-wrap"><i class="fas fa-file-alt"></i></div>
+    <h1>Text <span>Summarization</span></h1>
+    <p>Paste any long text and let AI extract the key points for you instantly</p>
+</div>
+
+<!-- ═══════════ MAIN CONTENT ═══════════ -->
+<div class="main-content">
+
+    <form method="POST" action="{{ url_for('summarize') }}" id="sumForm" onsubmit="showLoading()">
+        <!-- INPUT SECTION -->
+        <div class="box">
+            <div class="box-header">
+                <div class="box-header-left">
+                    <i class="fas fa-pen-fancy"></i>
+                    <h5>Input Text</h5>
+                </div>
+                <span class="box-badge">SOURCE</span>
+            </div>
+            <div class="box-body">
+                <textarea class="styled-textarea" name="text" id="inputText" placeholder="Paste your article, essay, or any long text here...
+                
+The AI will automatically extract the most important points and generate a concise summary for you." required>{{ original_text or '' }}</textarea>
+                <div class="controls-row">
+                    <span class="char-count">Characters: <span id="charCount">{{ (original_text or '')|length }}</span></span>
+                    <div style="display:flex;gap:8px;">
+                        <button type="button" class="btn-clear" onclick="clearInput()">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                        <button type="submit" class="btn-generate" id="submitBtn">
+                            <i class="fas fa-magic"></i> Generate Summary
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOADING SPINNER -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner"></div>
+            <p>AI is analyzing your text and generating summary...</p>
+        </div>
+
+        <!-- SUMMARY OUTPUT SECTION (shows after generation) -->
+        {% if summary %}
+        <div class="box" id="summaryBox">
+            <div class="box-header">
+                <div class="box-header-left">
+                    <i class="fas fa-check-circle" style="color:#4caf50;"></i>
+                    <h5>AI Summary</h5>
+                </div>
+                <button type="button" class="btn-copy" id="copyBtn" onclick="copySummary()">
+                    <i class="fas fa-copy"></i> Copy
+                </button>
+            </div>
+            <div class="box-body">
+                <div class="summary-text" id="summaryOutput">{{ summary }}</div>
+                <div class="summary-stats">
+                    <div class="s-stat">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Original: <strong>{{ original_text|length }} characters</strong></span>
+                    </div>
+                    <div class="s-stat">
+                        <i class="fas fa-compress-alt"></i>
+                        <span>Summary: <strong>{{ summary|length }} characters</strong></span>
+                    </div>
+                    <div class="s-stat">
+                        <i class="fas fa-percentage"></i>
+                        <span>Reduced: <strong>{{ "%.0f"|format((1 - summary|length / original_text|length) * 100) }}%</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </form>
+
+    <!-- TIPS -->
+    <div class="tips-strip">
+        <div class="tip-pill"><i class="fas fa-check"></i> Works best with 100+ words</div>
+        <div class="tip-pill"><i class="fas fa-check"></i> Supports articles & essays</div>
+        <div class="tip-pill"><i class="fas fa-check"></i> Extracts key sentences</div>
+        <div class="tip-pill"><i class="fas fa-check"></i> Instant results</div>
+    </div>
+</div>
+
+</div><!-- end page-wrap -->
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="dash-footer">
+    <p><span class="f-highlight">© 2025 AI-Powered Content Transformation Hub</span></p>
+    <p>Savitribai Phule Pune University</p>
+</footer>
+
+<!-- ═══════════ TOAST ═══════════ -->
+<div class="toast-wrap">
+    <div class="toast-msg" id="toast"><i class="fas fa-check-circle"></i> <span id="toastText">Copied to clipboard!</span></div>
+</div>
+
+<script>
+// ─── Live character count
+const inputEl = document.getElementById('inputText');
+const charCountEl = document.getElementById('charCount');
+if(inputEl && charCountEl){
+    inputEl.addEventListener('input', () => { charCountEl.textContent = inputEl.value.length; });
+}
+
+// ─── Clear input
+function clearInput(){
+    if(inputEl) inputEl.value = '';
+    if(charCountEl) charCountEl.textContent = '0';
+    
+    // Also hide summary if shown
+    const summaryBox = document.getElementById('summaryBox');
+    if(summaryBox) summaryBox.style.display = 'none';
+}
+
+// ─── Show loading spinner
+function showLoading(){
+    if(inputEl.value.trim().length === 0){
+        showToast('Please enter some text to summarize');
+        return false;
+    }
+    
+    const spinner = document.getElementById('loadingSpinner');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    if(spinner) spinner.style.display = 'block';
+    if(submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    }
+    
+    // Auto scroll to loading spinner
+    setTimeout(() => {
+        if(spinner) spinner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+    
+    return true;
+}
+
+// ─── Copy summary
+function copySummary(){
+    const out = document.getElementById('summaryOutput');
+    if(!out) return;
+    navigator.clipboard.writeText(out.textContent.trim()).then(() => {
+        showToast('Summary copied to clipboard!');
+        const btn = document.getElementById('copyBtn');
+        btn.classList.add('copied');
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied';
+        setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '<i class="fas fa-copy"></i> Copy'; }, 1800);
+    });
+}
+
+// ─── Toast notification
+function showToast(msg){
+    const t = document.getElementById('toast');
+    document.getElementById('toastText').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ─── Navbar scroll shrink
+const topNav = document.getElementById('topNav');
+window.addEventListener('scroll', () => { topNav.classList.toggle('scrolled', window.scrollY > 40); });
+
+// ─── Auto scroll to summary if it exists
+document.addEventListener('DOMContentLoaded', function() {
+    const summaryBox = document.getElementById('summaryBox');
+    if(summaryBox) {
+        setTimeout(() => {
+            summaryBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+    }
+});
+</script>
+</body>
+</html>

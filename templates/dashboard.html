@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #121212;
+            color: #f0f0f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ─── NAVBAR ─── */
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 2px solid #FFC107;
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: padding .3s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .4);
+        }
+
+        .top-navbar.scrolled {
+            padding: 10px 32px;
+        }
+
+        .nb-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nb-logo {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #121212;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, .3);
+        }
+
+        .nb-brand {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(to right, #FFC107, #FF9800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nb-links {
+            display: flex;
+            gap: 6px;
+        }
+
+        .nb-links a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 8px;
+            transition: all .25s;
+        }
+
+        .nb-links a:hover,
+        .nb-links a.active {
+            color: #121212;
+            background: #FFC107;
+        }
+
+        .nb-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nb-notif {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #222;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            cursor: pointer;
+            transition: all .25s;
+            position: relative;
+        }
+
+        .nb-notif:hover {
+            border-color: #FFC107;
+            color: #FFC107;
+        }
+
+        .notif-dot {
+            width: 8px;
+            height: 8px;
+            background: #FFC107;
+            border-radius: 50%;
+            position: absolute;
+            top: 7px;
+            right: 7px;
+        }
+
+        .nb-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .nb-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #121212;
+            font-weight: 700;
+            border: 2px solid #333;
+        }
+
+        .nb-user-info {
+            text-align: left;
+        }
+
+        .nb-user-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .nb-user-role {
+            font-size: 11px;
+            color: #FFC107;
+        }
+
+        /* ─── MAIN LAYOUT ─── */
+        .dash-wrap {
+            padding-top: 70px;
+        }
+
+        /* ─── SLIDE SECTIONS ─── */
+        .slide {
+            min-height: 100vh;
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide:nth-child(even) {
+            background: #1a1a1a;
+        }
+
+        .slide:nth-child(odd) {
+            background: #121212;
+        }
+
+        /* section heading */
+        .sec-head {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .sec-head h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #FFC107;
+            margin-bottom: 8px;
+        }
+
+        .sec-head p {
+            color: #888;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .sec-head .sec-line {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(to right, #FFC107, #FF9800);
+            border-radius: 4px;
+            margin: 14px auto 0;
+        }
+
+        /* ─── SLIDE 1 : WELCOME HERO ─── */
+        .welcome-slide {
+            background: linear-gradient(rgba(0, 0, 0, .75), rgba(0, 0, 0, .8)),
+                url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            text-align: center;
+            position: relative;
+        }
+
+        .welcome-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .welcome-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            color: #121212;
+            margin: 0 auto 24px;
+            box-shadow: 0 8px 30px rgba(255, 193, 7, .35);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-10px)
+            }
+        }
+
+        .welcome-inner h1 {
+            font-size: 2.6rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+        }
+
+        .welcome-inner h1 span {
+            background: linear-gradient(to right, #FFC107, #FF9800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .welcome-inner p {
+            color: #aaa;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .quick-stats {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .qs-card {
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 193, 7, .25);
+            border-radius: 14px;
+            padding: 18px 28px;
+            min-width: 140px;
+            text-align: center;
+            backdrop-filter: blur(6px);
+            transition: all .3s;
+        }
+
+        .qs-card:hover {
+            border-color: #FFC107;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(255, 193, 7, .2);
+        }
+
+        .qs-num {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .qs-label {
+            font-size: .82rem;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        /* ─── SLIDE 2 : FEATURE CARDS ─── */
+        .feat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .feat-card {
+            background: #222;
+            border: 1px solid #333;
+            border-radius: 18px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: all .35s;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .feat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 193, 7, .1), rgba(255, 152, 0, .08));
+            opacity: 0;
+            transition: opacity .35s;
+        }
+
+        .feat-card:hover {
+            transform: translateY(-12px);
+            border-color: #FFC107;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, .35);
+        }
+
+        .feat-card:hover::before {
+            opacity: 1;
+        }
+
+        .feat-card * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .fc-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: linear-gradient(135deg, rgba(255, 193, 7, .15), rgba(255, 152, 0, .15));
+            border: 1px solid rgba(255, 193, 7, .25);
+            color: #FFC107;
+            transition: all .3s;
+        }
+
+        .feat-card:hover .fc-icon {
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            color: #121212;
+            border-color: #FFC107;
+        }
+
+        .feat-card h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #eee;
+            margin-bottom: 8px;
+        }
+
+        .feat-card p {
+            color: #888;
+            font-size: .88rem;
+            line-height: 1.55;
+            margin-bottom: 20px;
+        }
+
+        .feat-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            color: #121212;
+            padding: 9px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: .85rem;
+            transition: all .25s;
+        }
+
+        .feat-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(255, 193, 7, .35);
+        }
+
+        /* ─── SLIDE 3 : HOW IT WORKS ─── */
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .how-card {
+            text-align: center;
+        }
+
+        .how-step {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            color: #121212;
+            font-size: 1.2rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+            box-shadow: 0 6px 16px rgba(255, 193, 7, .35);
+        }
+
+        .how-card h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #eee;
+            margin-bottom: 8px;
+        }
+
+        .how-card p {
+            color: #888;
+            font-size: .85rem;
+            line-height: 1.55;
+        }
+
+        .how-connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+        }
+
+        .how-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 0;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .how-item {
+            flex: 1;
+            min-width: 180px;
+            max-width: 220px;
+            text-align: center;
+            position: relative;
+        }
+
+        .how-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 28px;
+            right: -12px;
+            width: 24px;
+            height: 3px;
+            background: linear-gradient(to right, #FFC107, #FF9800);
+            border-radius: 2px;
+        }
+
+        @media(max-width:600px) {
+            .how-item:not(:last-child)::after {
+                display: none;
+            }
+
+            .how-row {
+                gap: 32px;
+            }
+        }
+
+        /* ─── SLIDE 4 : USAGE TIPS ─── */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .tip-card {
+            background: #222;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+            transition: all .3s;
+        }
+
+        .tip-card:hover {
+            border-color: #FFC107;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .3);
+        }
+
+        .tip-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255, 193, 7, .15), rgba(255, 152, 0, .15));
+            border: 1px solid rgba(255, 193, 7, .25);
+            color: #FFC107;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .tip-content h5 {
+            font-size: .95rem;
+            font-weight: 700;
+            color: #eee;
+            margin-bottom: 5px;
+        }
+
+        .tip-content p {
+            color: #888;
+            font-size: .82rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* ─── SLIDE 5 : PLAN COMPARISON ─── */
+        .plan-row {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .plan-card {
+            flex: 1;
+            min-width: 280px;
+            max-width: 380px;
+            background: #222;
+            border: 2px solid #333;
+            border-radius: 20px;
+            padding: 36px 28px;
+            text-align: center;
+            transition: all .35s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card.featured {
+            border-color: #FFC107;
+            box-shadow: 0 16px 40px rgba(255, 193, 7, .2);
+        }
+
+        .plan-card.featured::before {
+            content: '⭐ POPULAR';
+            position: absolute;
+            top: 16px;
+            right: -30px;
+            background: #FFC107;
+            color: #121212;
+            font-size: .7rem;
+            font-weight: 800;
+            padding: 4px 38px;
+            transform: rotate(45deg);
+            letter-spacing: .5px;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-8px);
+            border-color: #FFC107;
+        }
+
+        .plan-badge {
+            display: inline-block;
+            background: rgba(255, 193, 7, .12);
+            border: 1px solid rgba(255, 193, 7, .3);
+            color: #FFC107;
+            padding: 5px 16px;
+            border-radius: 50px;
+            font-size: .78rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .plan-card h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #eee;
+            margin-bottom: 6px;
+        }
+
+        .plan-price {
+            font-size: 2.4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .plan-price span {
+            font-size: .85rem;
+            color: #888;
+            font-weight: 400;
+            -webkit-text-fill-color: #888;
+        }
+
+        .plan-divider {
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(to right, #FFC107, #FF9800);
+            border-radius: 2px;
+            margin: 18px auto;
+        }
+
+        .plan-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 28px;
+        }
+
+        .plan-features li {
+            padding: 9px 0;
+            border-bottom: 1px solid #2a2a2a;
+            color: #aaa;
+            font-size: .88rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .plan-features .check {
+            color: #FFC107;
+            font-size: .9rem;
+        }
+
+        .plan-features .cross {
+            color: #555;
+        }
+
+        .plan-btn {
+            display: block;
+            width: 100%;
+            padding: 11px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            font-size: .9rem;
+            cursor: pointer;
+            transition: all .25s;
+            background: #2a2a2a;
+            color: #aaa;
+            border: 1px solid #444;
+        }
+
+        .plan-btn:hover {
+            border-color: #FFC107;
+            color: #FFC107;
+        }
+
+        .plan-btn.primary {
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            color: #121212;
+            border: none;
+        }
+
+        .plan-btn.primary:hover {
+            box-shadow: 0 8px 22px rgba(255, 193, 7, .4);
+            transform: translateY(-2px);
+        }
+
+        /* ─── FOOTER ─── */
+        .dash-footer {
+            background: #0a0a0a;
+            border-top: 2px solid #FFC107;
+            padding: 28px 32px;
+            text-align: center;
+        }
+
+        .dash-footer p {
+            color: #777;
+            font-size: .82rem;
+            margin: 3px 0;
+        }
+
+        .dash-footer .f-highlight {
+            color: #FFC107;
+            font-weight: 600;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media(max-width:768px) {
+            .slide {
+                padding: 36px 18px;
+            }
+
+            .top-navbar {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .nb-links {
+                gap: 2px;
+            }
+
+            .nb-links a {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .welcome-inner h1 {
+                font-size: 1.8rem;
+            }
+
+            .how-item:not(:last-child)::after {
+                display: none;
+            }
+
+            .sec-head h2 {
+                font-size: 1.7rem;
+            }
+        }
+
+        @media(max-width:480px) {
+            .nb-links {
+                display: none;
+            }
+
+            .quick-stats {
+                gap: 10px;
+            }
+
+            .qs-card {
+                padding: 14px 18px;
+                min-width: 110px;
+            }
+        }
+
+        /* ─── PROFILE DROPDOWN ─── */
+        .nb-profile {
+            position: relative;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 12px;
+            background: #222;
+            border: 1px solid #333;
+            border-radius: 12px;
+            min-width: 180px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .4);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all .25s ease;
+            z-index: 1100;
+        }
+
+        .profile-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .profile-dropdown::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 16px;
+            width: 16px;
+            height: 16px;
+            background: #222;
+            border-top: 1px solid #333;
+            border-left: 1px solid #333;
+            transform: rotate(45deg);
+        }
+
+        .dropdown-header {
+            padding: 16px;
+            border-bottom: 1px solid #2a2a2a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .dropdown-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #121212;
+            font-weight: 700;
+            border: 2px solid #FFC107;
+        }
+
+        .dropdown-user-info {
+            flex: 1;
+        }
+
+        .dropdown-user-name {
+            font-size: .9rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .dropdown-user-role {
+            font-size: .75rem;
+            color: #FFC107;
+        }
+
+        .dropdown-menu {
+            list-style: none;
+            padding: 8px 0;
+        }
+
+        .dropdown-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ccc;
+            font-size: .85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .2s;
+            text-decoration: none;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255, 193, 7, .1);
+            color: #FFC107;
+            padding-left: 24px;
+        }
+
+        .dropdown-item i {
+            width: 16px;
+            text-align: center;
+            font-size: .9rem;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #2a2a2a;
+            margin: 8px 0;
+        }
+
+        .dropdown-item.logout {
+            color: #ff5252;
+        }
+
+        .dropdown-item.logout:hover {
+            background: rgba(255, 82, 82, .1);
+            color: #ff5252;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══════════ NAVBAR ═══════════ -->
+    <nav class="top-navbar" id="topNav">
+        <div class="nb-left">
+            <div class="nb-logo"><i class="fas fa-robot"></i></div>
+            <span class="nb-brand">AI Hub</span>
+        </div>
+        <div class="nb-links">
+            <a href="#welcome" class="active">Home</a>
+            <a href="#features">Features</a>
+            <a href="#how">How It Works</a>
+            <a href="#tips">Tips</a>
+            <a href="#plans">Plans</a>
+            <a href="{{ url_for('profile') }}">Profile</a>
+        </div>
+        <div class="nb-right">
+            <div class="nb-notif"><i class="bi bi-bell"></i>
+                <div class="notif-dot"></div>
+            </div>
+            <div class="nb-profile" onclick="toggleProfileDropdown()" id="profileTrigger">
+                <div class="nb-avatar">
+                    {% if session.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' + session.profile_image) }}"
+                        style="width:100%;height:100%;border-radius:50%;object-fit:cover;" alt="">
+                    {% else %}
+                    {{ session.user_name[0]|upper }}
+                    {% endif %}
+                </div>
+                <div class="nb-user-info">
+                    <div class="nb-user-name">{{ session.user_name }}</div>
+                    <div class="nb-user-role">{{ session.user_role }}</div>
+                </div>
+
+            
+            </div>
+        </div>
+    </nav>
+
+    <div class="dash-wrap">
+
+        <!-- ═══════════ SLIDE 1 : WELCOME ═══════════ -->
+        <section id="welcome" class="slide welcome-slide">
+            <div class="welcome-inner">
+                <div class="welcome-avatar">
+                    {% if session.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' + session.profile_image) }}"
+                        style="width:100%;height:100%;border-radius:50%;object-fit:cover;" alt="">
+                    {% else %}
+                    <i class="fas fa-user"></i>
+                    {% endif %}
+                </div>
+                <h1>Welcome back, <span>{{ session.user_name }}</span> 👋</h1>
+                <p>You're all set to explore AI-powered content transformation. Use the features below or navigate
+                    through the sections to get started.</p>
+                <div class="quick-stats">
+                    <div class="qs-card">
+                        <div class="qs-num">0</div>
+                        <div class="qs-label">Summaries</div>
+                    </div>
+                    <div class="qs-card">
+                        <div class="qs-num">0</div>
+                        <div class="qs-label">Audio Clips</div>
+                    </div>
+                    <div class="qs-card">
+                        <div class="qs-num">0</div>
+                        <div class="qs-label">Transcripts</div>
+                    </div>
+                    <div class="qs-card">
+                        <div class="qs-num">0</div>
+                        <div class="qs-label">OCR Scans</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ SLIDE 2 : FEATURES ═══════════ -->
+        <section id="features" class="slide">
+            <div class="sec-head">
+                <h2>Your AI <span
+                        style="background:linear-gradient(135deg,#FFC107,#FF9800);-webkit-background-clip:text;background-clip:text;color:transparent;">Toolkit</span>
+                </h2>
+                <p>Pick a feature and start transforming your content in seconds</p>
+                <div class="sec-line"></div>
+            </div>
+            <div class="feat-grid">
+                <a href="{{ url_for('summarize') }}" style="text-decoration:none;" class="feat-card">
+                    <div class="fc-icon"><i class="fas fa-file-alt"></i></div>
+                    <h4>Summarization</h4>
+                    <p>Turn long documents into short, clear summaries using AI.</p>
+                    <span class="feat-btn">Try Now →</span>
+                </a>
+                <a href="{{ url_for('tts') }}" style="text-decoration:none;" class="feat-card">
+                    <div class="fc-icon"><i class="fas fa-volume-high"></i></div>
+                    <h4>Text to Speech</h4>
+                    <p>Convert written text into natural-sounding audio clips.</p>
+                    <span class="feat-btn">Try Now →</span>
+                </a>
+                <a href="{{ url_for('stt') }}" style="text-decoration:none;" class="feat-card">
+                    <div class="fc-icon"><i class="fas fa-microphone"></i></div>
+                    <h4>Speech to Text</h4>
+                    <p>Upload audio and get an accurate text transcript instantly.</p>
+                    <span class="feat-btn">Try Now →</span>
+                </a>
+                <a href="{{ url_for('ocr') }}" style="text-decoration:none;" class="feat-card">
+                    <div class="fc-icon"><i class="fas fa-image"></i></div>
+                    <h4>OCR Scanner</h4>
+                    <p>Extract text from any image with high precision OCR.</p>
+                    <span class="feat-btn">Try Now →</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- ═══════════ SLIDE 3 : HOW IT WORKS ═══════════ -->
+        <section id="how" class="slide">
+            <div class="sec-head">
+                <h2>How It <span
+                        style="background:linear-gradient(135deg,#FFC107,#FF9800);-webkit-background-clip:text;background-clip:text;color:transparent;">Works</span>
+                </h2>
+                <p>Just 3 simple steps to transform your content</p>
+                <div class="sec-line"></div>
+            </div>
+            <div class="how-row">
+                <div class="how-item">
+                    <div class="how-step">1</div>
+                    <h4>Choose a Tool</h4>
+                    <p>Pick the AI feature that matches your need — summarize, convert speech, or scan images.</p>
+                </div>
+                <div class="how-item">
+                    <div class="how-step">2</div>
+                    <h4>Upload or Input</h4>
+                    <p>Paste your text, upload an audio file, or drop an image. Our system handles the rest.</p>
+                </div>
+                <div class="how-item">
+                    <div class="how-step">3</div>
+                    <h4>Get Results</h4>
+                    <p>Receive your transformed content instantly. Copy, download, or use it right away.</p>
+                </div>
+                <div class="how-item">
+                    <div class="how-step">✓</div>
+                    <h4>Done!</h4>
+                    <p>Save your work or start a new transformation. It's that simple and powerful.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ SLIDE 4 : TIPS & TRICKS ═══════════ -->
+        <section id="tips" class="slide">
+            <div class="sec-head">
+                <h2>Tips &amp; <span
+                        style="background:linear-gradient(135deg,#FFC107,#FF9800);-webkit-background-clip:text;background-clip:text;color:transparent;">Tricks</span>
+                </h2>
+                <p>Make the most out of your AI Hub experience</p>
+                <div class="sec-line"></div>
+            </div>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-lightbulb"></i></div>
+                    <div class="tip-content">
+                        <h5>Better Summaries</h5>
+                        <p>For best results, paste well-structured text with clear paragraphs. The AI works best with
+                            content over 100 words.</p>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-headphones"></i></div>
+                    <div class="tip-content">
+                        <h5>Audio Quality Matters</h5>
+                        <p>Upload clean audio without background noise for accurate speech-to-text transcription. WAV
+                            and MP3 work best.</p>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-eye"></i></div>
+                    <div class="tip-content">
+                        <h5>Clear Images for OCR</h5>
+                        <p>Use high-resolution images with good lighting. Avoid blurry or skewed photos for the best
+                            text extraction results.</p>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-rocket"></i></div>
+                    <div class="tip-content">
+                        <h5>Upgrade for More</h5>
+                        <p>Paid users get access to multiple premium voices in TTS, higher usage limits, and priority
+                            processing speed.</p>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-keyboard"></i></div>
+                    <div class="tip-content">
+                        <h5>TTS Best Practices</h5>
+                        <p>Use proper punctuation and shorter sentences for the most natural-sounding audio output from
+                            text-to-speech.</p>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-shield-halved"></i></div>
+                    <div class="tip-content">
+                        <h5>Stay Secure</h5>
+                        <p>Your data is processed securely. Always log out after use on shared devices and keep your
+                            password strong.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ SLIDE 5 : PLANS ═══════════ -->
+        <section id="plans" class="slide">
+            <div class="sec-head">
+                <h2>Choose Your <span
+                        style="background:linear-gradient(135deg,#FFC107,#FF9800);-webkit-background-clip:text;background-clip:text;color:transparent;">Plan</span>
+                </h2>
+                <p>Simple pricing. Unlock the full power of AI Hub</p>
+                <div class="sec-line"></div>
+            </div>
+            <div class="plan-row">
+                <!-- Free -->
+                <div class="plan-card {% if session.user_role == 'Free User' %}featured{% endif %}">
+                    {% if session.user_role == 'Free User' %}<div
+                        style="position:absolute;top:14px;left:16px;background:#FFC107;color:#121212;font-size:.7rem;font-weight:800;padding:3px 10px;border-radius:50px;">
+                        YOUR PLAN</div>{% endif %}
+                    <div class="plan-badge"><i class="fas fa-star"></i> Free</div>
+                    <h3>Starter</h3>
+                    <div class="plan-price">$0 <span>/ month</span></div>
+                    <div class="plan-divider"></div>
+                    <ul class="plan-features">
+                        <li><span class="check"><i class="fas fa-check"></i></span> 1 Standard TTS Voice</li>
+                        <li><span class="check"><i class="fas fa-check"></i></span> Basic Summarization</li>
+                        <li><span class="check"><i class="fas fa-check"></i></span> Speech-to-Text Upload</li>
+                        <li><span class="check"><i class="fas fa-check"></i></span> OCR Image Scanning</li>
+                        <li><span class="cross"><i class="fas fa-times"></i></span> Premium Voices</li>
+                        <li><span class="cross"><i class="fas fa-times"></i></span> Priority Processing</li>
+                    </ul>
+                    <button class="plan-btn {% if session.user_role == 'Free User' %}primary{% endif %}">
+                        {% if session.user_role == 'Free User' %}Current Plan{% else %}Downgrade{% endif %}
+                    </button>
+                </div>
+                <!-- Paid -->
+                <div class="plan-card {% if session.user_role == 'Paid User' %}featured{% endif %}">
+                    {% if session.user_role == 'Paid User' %}<div
+                        style="position:absolute;top:14px;left:16px;background:#FFC107;color:#121212;font-size:.7rem;font-weight:800;padding:3px 10px;border-radius:50px;">
+                        YOUR PLAN</div>{% endif %}
+                    <div class="plan-badge"><i class="fas fa-gem"></i> Premium</div>
+                    <h3>Pro</h3>
+                    <div class="plan-price">$9.99 <span>/ month</span></div>
+                    <div class="plan-divider"></div>
+                    <ul class="plan-features">
+                        <li><span class="check"><i class="fas fa-check"></i></span> 1 Standard TTS Voice</li>
+                        <li><span class="check"><i class="fas fa-check"></i></span> Advanced Summarization</li>
+                        <li><span class="check"><i class="fas fa-check"></i></span> Speech-to-Text Upload</li>
+                        <li><span class="check"><i class="fas fa-check"></i></span> OCR Image Scanning</li>
+                        <li><span class="check"><i class="fas fa-check"></i></span> 4 Premium TTS Voices</li>
+                        <li><span class="check"><i class="fas fa-check"></i></span> Priority Processing</li>
+                    </ul>
+                    <button class="plan-btn {% if session.user_role == 'Paid User' %}primary{% endif %}"
+                        onclick="alert('Upgrade feature coming soon!')">
+                        {% if session.user_role == 'Paid User' %}Current Plan{% else %}Upgrade Now{% endif %}
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </div><!-- end dash-wrap -->
+
+    <!-- ═══════════ FOOTER ═══════════ -->
+    <footer class="dash-footer">
+        <p><span class="f-highlight">© 2025 AI-Powered Content Transformation Hub</span></p>
+        <p>Savitribai Phule Pune University &nbsp;|&nbsp; Built with <i class="fas fa-heart"
+                style="color:#ff0707;font-size:.75rem;"></i> Rutika Pardhi</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ─── Navbar scroll shrink
+        const topNav = document.getElementById('topNav');
+        window.addEventListener('scroll', () => {
+            topNav.classList.toggle('scrolled', window.scrollY > 40);
+        });
+
+        // ─── Active nav link on scroll
+        const slides = document.querySelectorAll('.slide');
+        const navLinks = document.querySelectorAll('.nb-links a');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    const id = e.target.id;
+                    const match = document.querySelector(`.nb-links a[href="#${id}"]`);
+                    if (match) match.classList.add('active');
+                }
+            });
+        }, { rootMargin: '-45% 0px -45% 0px' });
+        slides.forEach(s => observer.observe(s));
+
+        // ─── Smooth scroll for nav links
+        document.querySelectorAll('.nb-links a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const t = document.querySelector(a.getAttribute('href'));
+                if (t) t.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // ─── Scroll-in animation for cards
+        const animObserver = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.style.opacity = '1';
+                    e.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.feat-card, .how-item, .tip-card, .plan-card, .qs-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(24px)';
+            el.style.transition = 'opacity .5s ease, transform .5s ease';
+            animObserver.observe(el);
+        });
+        // ─── Profile Dropdown ───
+        let dropdownVisible = false;
+
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdownVisible = !dropdownVisible;
+
+            if (dropdownVisible) {
+                dropdown.classList.add('show');
+                // Close dropdown when clicking outside
+                setTimeout(() => {
+                    document.addEventListener('click', closeDropdownOnClickOutside);
+                }, 10);
+            } else {
+                dropdown.classList.remove('show');
+                document.removeEventListener('click', closeDropdownOnClickOutside);
+            }
+        }
+
+        function closeDropdownOnClickOutside(e) {
+            const dropdown = document.getElementById('profileDropdown');
+            const trigger = document.getElementById('profileTrigger');
+
+            if (!dropdown.contains(e.target) && !trigger.contains(e.target)) {
+                dropdown.classList.remove('show');
+                dropdownVisible = false;
+                document.removeEventListener('click', closeDropdownOnClickOutside);
+            }
+        }
+
+        // Close dropdown when clicking on any dropdown item
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.getElementById('profileDropdown').classList.remove('show');
+                dropdownVisible = false;
+                document.removeEventListener('click', closeDropdownOnClickOutside);
+            });
+        });
+    </script>
+</body>
+
+</html>
