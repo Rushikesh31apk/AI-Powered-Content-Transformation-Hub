@@ -6,11 +6,12 @@ A modern, full-stack web application that provides AI-powered content transforma
 ![HTML5](https://img.shields.io/badge/HTML5-Frontend-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-Styling-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+
 ![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 
 ![Sumy](https://img.shields.io/badge/Sumy-Text%20Summarization-FFD700?style=for-the-badge)
 ![gTTS](https://img.shields.io/badge/gTTS-Text%20to%20Speech-34A853?style=for-the-badge&logo=google)
-![SpeechRecognition](https://img.shields.io/badge/SpeechRecognition-Audio%20Processing-FF6F00?style=for-the-badge)
+![SpeechRecogn](https://img.shields.io/badge/SpeechRecognition-Audio%20Processing-FF6F00?style=for-the-badge)
 ![Pytesseract](https://img.shields.io/badge/Pytesseract-OCR-000000?style=for-the-badge)
 
 
