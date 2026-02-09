@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email - AI Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('../static/images/login_.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(245, 197, 24, 0.1) 0%, transparent 0%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+            50% { transform: scale(1.1) rotate(180deg); opacity: 0.5; }
+        }
+        
+        .verify-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+        }
+        
+        .verify-box {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(245, 197, 24, 0.3);
+            border-radius: 20px;
+            padding: 40px 35px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        0 0 40px rgba(245, 197, 24, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .verify-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f5c518 0%, #ffd700 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(245, 197, 24, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .verify-icon i {
+            font-size: 2.5rem;
+            color: #0f0f0f;
+        }
+        
+        h2 {
+            color: #f5c518;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #999;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .email-display {
+            background: rgba(245, 197, 24, 0.1);
+            border: 1px solid rgba(245, 197, 24, 0.3);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .email-display strong {
+            color: #f5c518;
+            font-size: 1.05rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-label i {
+            margin-right: 8px;
+            color: #f5c518;
+        }
+        
+        .form-control {
+            background: rgba(42, 42, 42, 0.6);
+            border: 1px solid rgba(245, 197, 24, 0.2);
+            color: #e0e0e0;
+            padding: 14px 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            letter-spacing: 8px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            background: rgba(42, 42, 42, 0.8);
+            border-color: #f5c518;
+            box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.1);
+            color: #e0e0e0;
+        }
+        
+        .form-control::placeholder {
+            letter-spacing: normal;
+            color: #666;
+        }
+        
+        .btn-verify {
+            background: linear-gradient(135deg, #f5c518 0%, #ffd700 100%);
+            border: none;
+            color: #0f0f0f;
+            font-weight: 600;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn-verify:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(245, 197, 24, 0.4);
+        }
+        
+        .resend-section {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(245, 197, 24, 0.1);
+        }
+        
+        .resend-section p {
+            color: #999;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+        
+        .btn-resend {
+            background: transparent;
+            border: 1px solid rgba(245, 197, 24, 0.4);
+            color: #f5c518;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-resend:hover {
+            background: rgba(245, 197, 24, 0.1);
+            color: #ffd700;
+            border-color: #f5c518;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        
+        .instructions {
+            background: rgba(42, 42, 42, 0.6);
+            border-left: 3px solid #f5c518;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .instructions h6 {
+            color: #f5c518;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+        
+        .instructions ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #ccc;
+            font-size: 0.8rem;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        @media (max-width: 576px) {
+            .verify-box {
+                padding: 30px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="verify-container">
+        <div class="verify-box">
+            <div class="verify-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+            
+            <h2>Verify Your Email</h2>
+            <p class="subtitle">We've sent a verification code to:</p>
+            
+            <div class="email-display">
+                <strong>{{ email }}</strong>
+            </div>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <div class="instructions">
+                <h6><i class="bi bi-info-circle"></i> Instructions:</h6>
+                <ul>
+                    <li>Check your email inbox for the 6-digit code</li>
+                    <li>The code expires in 10 minutes</li>
+                    <li>Check spam folder if you don't see it</li>
+                </ul>
+            </div>
+            
+            <form method="POST">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="bi bi-key"></i>Enter Verification Code
+                    </label>
+                    <input type="text" class="form-control" name="otp" placeholder="000000" 
+                           maxlength="6" pattern="[0-9]{6}" required autofocus>
+                </div>
+                
+                <button type="submit" class="btn btn-verify">
+                    <i class="bi bi-check-circle me-2"></i>Verify Email
+                </button>
+            </form>
+            
+            <div class="resend-section">
+                <p>Didn't receive the code?</p>
+                <a href="{{ url_for('resend_otp') }}" class="btn-resend">
+                    <i class="bi bi-arrow-clockwise me-1"></i>Resend Code
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Auto-format OTP input
+        document.querySelector('input[name="otp"]').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    </script>
+</body>
+</html>
