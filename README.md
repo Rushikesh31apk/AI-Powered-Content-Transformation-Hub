@@ -75,6 +75,33 @@ To democratize access to AI-powered content transformation tools, making advance
   
 ![Profile](images/image17.png)
 
+- How it works
+  
+![How it works](images/image10.png)
+
+- Tips
+  
+![Tips](images/image11.png)
+
+- Plans
+  
+![Plans](images/image12.png)
+
+- Summerization
+  
+![Summerization](images/image13.png)
+
+- Text To Speech
+  
+![Text To Speech](images/image14.png)
+
+- Speech To Text
+  
+![Speech To Text](images/image15.png)
+
+- Extract text from Image
+  
+![Extract text from Image](images/image16.png)
 
 ## ✨ Key Features
 
