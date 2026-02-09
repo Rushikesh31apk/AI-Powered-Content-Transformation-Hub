@@ -114,8 +114,12 @@ To democratize access to AI-powered content transformation tools, making advance
 - Session-based authentication  
 - Profile image upload  
 - Role-based access (Free / Paid User)
-
 ---
+
+- Email verification
+  
+![Email verification](images/image17.png)
+
 
 ### 🧠 2. AI-Powered Features
 
