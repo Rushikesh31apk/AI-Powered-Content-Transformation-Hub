@@ -5,431 +5,922 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - AI Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-            background:#121212; color:#f0f0f0; min-height:100vh;
+            font-family: 'Manrope', sans-serif;
+            background: #0a0a0a;
+            color: #f0f0f0;
+            min-height: 100vh;
         }
 
-        /* ─── NAVBAR ─── */
-        .top-navbar {
-            position:fixed; top:0; left:0; width:100%; z-index:1000;
-            background:rgba(18,18,18,0.95); backdrop-filter:blur(12px);
-            border-bottom:2px solid #FFC107; padding:14px 32px; display:flex; align-items:center;
-            justify-content:space-between; box-shadow:0 4px 20px rgba(0,0,0,.4);
+        /* Grain Overlay */
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.3;
         }
-        .nb-left { display:flex; align-items:center; gap:12px; }
-        .nb-logo {
-            width:42px; height:42px; background:linear-gradient(135deg,#FFC107,#FF9800);
-            border-radius:50%; display:flex; align-items:center; justify-content:center;
-            font-size:18px; color:#121212; font-weight:800;
-        }
-        .nb-brand { font-size:22px; font-weight:800; background:linear-gradient(to right,#FFC107,#FF9800); -webkit-background-clip:text; background-clip:text; color:transparent; }
-        .nb-links { display:flex; gap:6px; }
-        .nb-links a {
-            color:#aaa; text-decoration:none; font-size:14px; font-weight:600;
-            padding:8px 14px; border-radius:8px; transition:all .25s;
-        }
-        .nb-links a:hover, .nb-links a.active { color:#121212; background:#FFC107; }
-        .nb-right { display:flex; align-items:center; gap:16px; }
-        .nb-profile { display:flex; align-items:center; gap:10px; }
-        .nb-avatar {
-            width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#FFC107,#FF9800);
-            display:flex; align-items:center; justify-content:center; font-size:16px; color:#121212; font-weight:700;
-            border:2px solid #333; overflow:hidden;
-        }
-        .nb-user-name { font-size:13px; font-weight:700; color:#fff; }
-        .nb-user-role { font-size:11px; color:#FFC107; }
 
-        .page-wrap { padding-top:84px; min-height:100vh; display:flex; flex-direction:column; }
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+            z-index: 1000;
+        }
 
-        /* ─── HERO ─── */
-        .page-hero {
-            background:linear-gradient(135deg, #1a1a1a 0%, #222 100%);
-            border-bottom:1px solid #2a2a2a; padding:36px 32px 32px; text-align:center; position:relative; overflow:hidden;
+        .navbar .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .hero-icon-wrap {
-            width:68px; height:68px; border-radius:18px; margin:0 auto 18px;
-            background:linear-gradient(135deg,rgba(255,193,7,.15),rgba(255,152,0,.15));
-            border:1px solid rgba(255,193,7,.3);
-            display:flex; align-items:center; justify-content:center;
-            font-size:28px; color:#FFC107;
-        }
-        .page-hero h1 { font-size:1.9rem; font-weight:800; color:#fff; margin-bottom:6px; }
-        .page-hero h1 span { background:linear-gradient(135deg,#FFC107,#FF9800); -webkit-background-clip:text; background-clip:text; color:transparent; }
-        .page-hero p { color:#888; font-size:.92rem; max-width:520px; margin:0 auto; }
 
-        .main-content { flex:1; padding:32px; max-width:900px; margin:0 auto; width:100%; }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            font-family: 'Archivo Black', sans-serif;
+        }
 
-        /* ─── PROFILE CARD ─── */
-        .profile-card {
-            background:#1e1e1e; border:1px solid #2e2e2e; border-radius:20px;
-            overflow:hidden; margin-bottom:24px;
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
         }
-        .profile-header {
-            background:linear-gradient(135deg, #1a1a1a 0%, #222 100%);
-            padding:32px 28px; text-align:center; position:relative;
-            border-bottom:1px solid #2a2a2a;
+
+        .brand-text {
+            font-size: 24px;
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .profile-avatar-wrap {
-            position:relative; display:inline-block; margin-bottom:20px;
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
         }
+
+        .nav-link {
+            color: #ddd;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #FFC107;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(90deg, #FFC107, #FF9800);
+        }
+
+        /* Page Container */
+        .page-container {
+            padding-top: 100px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            flex: 1;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        /* Left Sidebar */
+        .profile-sidebar {
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            position: sticky;
+            top: 120px;
+        }
+
+        .profile-avatar-container {
+            position: relative;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+
         .profile-avatar {
-            width:120px; height:120px; border-radius:50%; object-fit:cover;
-            border:4px solid #FFC107; box-shadow:0 8px 24px rgba(255,193,7,.3);
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #FFC107;
+            box-shadow: 0 8px 30px rgba(255, 193, 7, 0.3);
         }
+
         .profile-avatar-placeholder {
-            width:120px; height:120px; border-radius:50%;
-            background:linear-gradient(135deg,#FFC107,#FF9800);
-            display:flex; align-items:center; justify-content:center;
-            font-size:48px; color:#121212; border:4px solid #333;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            color: #0a0a0a;
+            border: 4px solid rgba(255, 193, 7, 0.3);
+            box-shadow: 0 8px 30px rgba(255, 193, 7, 0.3);
         }
-        .avatar-edit-btn {
-            position:absolute; bottom:5px; right:5px; width:36px; height:36px;
-            background:linear-gradient(135deg,#FFC107,#FF9800); border-radius:50%;
-            border:2px solid #222; display:flex; align-items:center; justify-content:center;
-            cursor:pointer; color:#121212; font-size:14px; transition:all .25s;
+
+        .avatar-edit-overlay {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #0a0a0a;
+            font-size: 18px;
+            transition: all 0.3s;
+            border: 3px solid rgba(20, 20, 20, 0.9);
         }
-        .avatar-edit-btn:hover { transform:scale(1.1); box-shadow:0 4px 12px rgba(255,193,7,.4); }
-        .profile-name { font-size:1.8rem; font-weight:800; color:#fff; margin-bottom:6px; }
-        .profile-email { font-size:.9rem; color:#888; margin-bottom:12px; }
+
+        .avatar-edit-overlay:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.5);
+        }
+
+        .profile-name {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 28px;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .profile-email {
+            font-size: 15px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
         .profile-role-badge {
-            display:inline-block; padding:6px 16px; border-radius:50px;
-            font-size:.8rem; font-weight:700; margin-top:8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 24px;
         }
-        .badge-free { background:rgba(100,100,100,.2); color:#999; border:1px solid #555; }
-        .badge-paid { background:linear-gradient(135deg,#FFC107,#FF9800); color:#121212; border:none; }
 
-        /* ─── INFO SECTION ─── */
-        .info-section {
-            padding:28px;
+        .badge-free {
+            background: rgba(100, 100, 100, 0.2);
+            color: #999;
+            border: 1px solid #555;
         }
+
+        .badge-paid {
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            color: #0a0a0a;
+            border: none;
+        }
+
+        .profile-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 193, 7, 0.3), transparent);
+            margin: 24px 0;
+        }
+
+        .profile-stats {
+            text-align: left;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 193, 7, 0.1);
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #888;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-label i {
+            color: #FFC107;
+            width: 20px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            color: #0a0a0a;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            color: #FFC107;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 193, 7, 0.1);
+            border-color: #FFC107;
+        }
+
+        .btn-danger {
+            background: transparent;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #EF4444;
+        }
+
+        .btn-danger:hover {
+            background: #EF4444;
+            color: #fff;
+        }
+
+        /* Right Content Area */
+        .profile-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .content-section {
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            border-radius: 20px;
+            padding: 32px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
         .section-title {
-            font-size:1.05rem; font-weight:700; color:#FFC107; margin-bottom:20px;
-            display:flex; align-items:center; gap:10px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #FFC107;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        .section-title i { font-size:18px; }
-        .info-grid { display:grid; gap:16px; }
-        .info-item {
-            background:#161616; border:1px solid #2a2a2a; border-radius:12px;
-            padding:18px 20px; display:flex; align-items:center; gap:16px;
-            transition:all .3s;
+
+        .section-title i {
+            font-size: 24px;
         }
-        .info-item:hover { border-color:rgba(255,193,7,.3); background:#1a1a1a; }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .info-card {
+            background: rgba(10, 10, 10, 0.5);
+            border: 1px solid rgba(255, 193, 7, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .info-card:hover {
+            border-color: rgba(255, 193, 7, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
         .info-icon {
-            width:42px; height:42px; min-width:42px; border-radius:10px;
-            background:linear-gradient(135deg,rgba(255,193,7,.15),rgba(255,152,0,.15));
-            border:1px solid rgba(255,193,7,.2);
-            display:flex; align-items:center; justify-content:center;
-            color:#FFC107; font-size:18px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 152, 0, 0.2) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFC107;
+            font-size: 18px;
         }
-        .info-content { flex:1; }
-        .info-label { font-size:.78rem; color:#666; margin-bottom:4px; text-transform:uppercase; letter-spacing:.5px; }
-        .info-value { font-size:.95rem; font-weight:600; color:#eee; }
 
-        /* ─── STATS CARDS ─── */
-        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:16px; margin-bottom:24px; }
-        .stat-card {
-            background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px;
-            padding:20px 16px; text-align:center; transition:all .3s;
+        .info-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
-        .stat-card:hover { border-color:#FFC107; transform:translateY(-4px); box-shadow:0 8px 20px rgba(0,0,0,.3); }
-        .stat-number { font-size:1.8rem; font-weight:900; background:linear-gradient(135deg,#FFC107,#FF9800); -webkit-background-clip:text; background-clip:text; color:transparent; margin-bottom:6px; }
-        .stat-label { font-size:.8rem; color:#888; }
 
-        /* ─── UPGRADE BOX ─── */
-        .upgrade-card {
-            background:linear-gradient(135deg, #1a1a1a 0%, #222 100%);
-            border:2px solid #FFC107; border-radius:16px; padding:28px;
-            text-align:center; position:relative; overflow:hidden;
+        .info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #eee;
         }
-        .upgrade-card::before {
-            content:''; position:absolute; width:200px; height:200px; border-radius:50%;
-            background:radial-gradient(circle, rgba(255,193,7,.08) 0%, transparent 70%);
-            top:-100px; right:-100px;
+
+        /* Activity Stats */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
         }
-        .upgrade-card h3 { font-size:1.5rem; font-weight:800; color:#FFC107; margin-bottom:12px; position:relative; z-index:1; }
-        .upgrade-card p { color:#aaa; margin-bottom:24px; position:relative; z-index:1; }
+
+        .activity-card {
+            background: rgba(10, 10, 10, 0.5);
+            border: 1px solid rgba(255, 193, 7, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .activity-card:hover {
+            border-color: rgba(255, 193, 7, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .activity-number {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 36px;
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .activity-label {
+            font-size: 13px;
+            color: #888;
+            font-weight: 600;
+        }
+
+        /* Upgrade Card */
+        .upgrade-section {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%);
+            border: 2px solid rgba(255, 193, 7, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upgrade-section::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 193, 7, 0.15) 0%, transparent 70%);
+            top: -150px;
+            right: -150px;
+        }
+
+        .upgrade-section h3 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 28px;
+            color: #FFC107;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upgrade-section p {
+            color: #aaa;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+            font-size: 16px;
+        }
+
         .upgrade-features {
-            display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:24px; position:relative; z-index:1;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 28px;
+            position: relative;
+            z-index: 1;
         }
-        .feature-tag {
-            background:rgba(255,193,7,.1); border:1px solid rgba(255,193,7,.3);
-            color:#FFC107; padding:6px 14px; border-radius:50px; font-size:.8rem; font-weight:600;
-        }
-        .btn-upgrade {
-            background:linear-gradient(135deg,#FFC107,#FF9800); color:#121212;
-            border:none; padding:12px 32px; border-radius:10px; font-weight:700;
-            font-size:.95rem; cursor:pointer; transition:all .3s; position:relative; z-index:1;
-        }
-        .btn-upgrade:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(255,193,7,.4); }
 
-        /* ─── ACTION BUTTONS ─── */
-        .action-btns {
-            display:flex; gap:12px; justify-content:center; margin-top:24px; flex-wrap:wrap;
+        .feature-item {
+            background: rgba(10, 10, 10, 0.6);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ddd;
+            font-size: 14px;
         }
-        .btn-action {
-            background:#2a2a2a; color:#999; border:1px solid #3a3a3a;
-            padding:10px 24px; border-radius:8px; font-size:.85rem; font-weight:600;
-            cursor:pointer; transition:all .25s; display:flex; align-items:center; gap:8px;
-            text-decoration:none;
-        }
-        .btn-action:hover { border-color:#FFC107; color:#FFC107; }
-        .btn-logout { border-color:#ff5722; color:#ff5722; }
-        .btn-logout:hover { background:#ff5722; color:#fff; }
 
-        .dash-footer {
-            background:#0a0a0a; border-top:2px solid #FFC107;
-            padding:24px 32px; text-align:center; margin-top:auto;
+        .feature-item i {
+            color: #FFC107;
         }
-        .dash-footer p { color:#777; font-size:.78rem; margin:2px 0; }
-        .dash-footer .f-highlight { color:#FFC107; font-weight:600; }
 
-        /* ─── EDIT MODAL ─── */
+        /* Modal */
         .modal-overlay {
-            position:fixed; inset:0; background:rgba(0,0,0,.85); display:none;
-            align-items:center; justify-content:center; z-index:2000; padding:20px;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
         }
-        .modal-overlay.active { display:flex; }
-        .modal-content {
-            background:#222; border:2px solid #FFC107; border-radius:16px;
-            padding:32px; max-width:500px; width:100%; max-height:90vh; overflow-y:auto;
-        }
-        .modal-header { margin-bottom:24px; }
-        .modal-header h3 { color:#FFC107; font-size:1.4rem; font-weight:800; margin-bottom:6px; }
-        .modal-header p { color:#888; font-size:.85rem; }
-        .form-group { margin-bottom:18px; }
-        .form-label { color:#ddd; font-size:.85rem; font-weight:600; margin-bottom:8px; display:block; }
-        .form-input {
-            width:100%; background:#161616; border:1px solid #333; color:#ddd;
-            padding:12px 14px; border-radius:8px; font-size:.9rem; transition:all .25s;
-        }
-        .form-input:focus { border-color:#FFC107; box-shadow:0 0 0 3px rgba(255,193,7,.1); outline:none; }
-        .modal-actions { display:flex; gap:12px; margin-top:24px; }
-        .btn-save {
-            flex:1; background:linear-gradient(135deg,#FFC107,#FF9800); color:#121212;
-            border:none; padding:12px; border-radius:8px; font-weight:700; cursor:pointer;
-        }
-        .btn-save:hover { box-shadow:0 6px 18px rgba(255,193,7,.4); }
-        .btn-cancel {
-            flex:1; background:#2a2a2a; color:#999; border:1px solid #3a3a3a;
-            padding:12px; border-radius:8px; font-weight:600; cursor:pointer;
-        }
-        .btn-cancel:hover { border-color:#FFC107; color:#FFC107; }
 
-        @media(max-width:768px){
-            .main-content { padding:24px 18px; }
-            .top-navbar { padding:12px 16px; }
-            .nb-links { display:none; }
-            .stats-grid { grid-template-columns:repeat(2, 1fr); }
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            border: 2px solid #FFC107;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            margin-bottom: 28px;
+        }
+
+        .modal-header h3 {
+            font-family: 'Archivo Black', sans-serif;
+            color: #FFC107;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .modal-header p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            color: #ddd;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            background: #0a0a0a;
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            color: #ddd;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: #FFC107;
+            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
+            outline: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0a0a0a;
+            border-top: 1px solid rgba(255, 193, 7, 0.2);
+            padding: 40px;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer p {
+            color: #666;
+            font-size: 14px;
+            margin: 4px 0;
+        }
+
+        .footer .highlight {
+            color: #FFC107;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-sidebar {
+                position: relative;
+                top: 0;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .activity-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar .container {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .profile-wrapper {
+                padding: 20px;
+            }
+
+            .activity-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .upgrade-features {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="grain-overlay"></div>
 
-<nav class="top-navbar">
-    <div class="nb-left">
-        <a href="{{ url_for('dashboard') }}" style="text-decoration:none;display:flex;align-items:center;gap:12px;">
-            <div class="nb-logo"><i class="fas fa-robot"></i></div>
-            <span class="nb-brand">AI Hub</span>
-        </a>
-    </div>
-    <div class="nb-links">
-        <a href="{{ url_for('dashboard') }}">Dashboard</a>
-        <a href="{{ url_for('summarize') }}">Summarize</a>
-        <a href="{{ url_for('tts') }}">Text to Speech</a>
-        <a href="{{ url_for('stt') }}">Speech to Text</a>
-        <a href="{{ url_for('ocr') }}">OCR</a>
-        <a href="{{ url_for('profile') }}">Profile</a>
-    </div>
-    <div class="nb-right">
-        <div class="nb-profile">
-            <div class="nb-avatar">
-                {% if session.profile_image %}
-                    <img src="{{ url_for('static', filename='uploads/' + session.profile_image) }}" style="width:100%;height:100%;object-fit:cover;" alt="">
-                {% else %}
-                    {{ session.user_name[0]|upper }}
-                {% endif %}
-            </div>
-            <div>
-                <div class="nb-user-name">{{ session.user_name }}</div>
-                <div class="nb-user-role">{{ session.user_role }}</div>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<div class="page-wrap">
-
-<div class="page-hero">
-    <div class="hero-icon-wrap"><i class="fas fa-user-circle"></i></div>
-    <h1>My <span>Profile</span></h1>
-    <p>Manage your account settings and preferences</p>
-</div>
-
-<div class="main-content">
-
-    <!-- STATS -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-number">0</div>
-            <div class="stat-label">Summaries</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">0</div>
-            <div class="stat-label">Audio Clips</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">0</div>
-            <div class="stat-label">Transcripts</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">0</div>
-            <div class="stat-label">OCR Scans</div>
-        </div>
-    </div>
-
-    <!-- PROFILE CARD -->
-    <div class="profile-card">
-        <div class="profile-header">
-            <div class="profile-avatar-wrap">
-                {% if user['profile_image'] %}
-                    <img src="{{ url_for('static', filename='uploads/' + user['profile_image']) }}" class="profile-avatar" alt="Profile">
-                {% else %}
-                    <div class="profile-avatar-placeholder">
-                        <i class="fas fa-user"></i>
-                    </div>
-                {% endif %}
-                <div class="avatar-edit-btn" onclick="alert('Profile picture upload coming soon!')">
-                    <i class="fas fa-camera"></i>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('dashboard') }}" class="nav-brand">
+                <div class="logo-icon">
+                    <i class="fas fa-robot"></i>
                 </div>
-            </div>
-            <div class="profile-name">{{ user['name'] }}</div>
-            <div class="profile-email">{{ user['email'] }}</div>
-            <div class="profile-role-badge {{ 'badge-paid' if user['role'] == 'Paid User' else 'badge-free' }}">
-                <i class="fas fa-{{ 'gem' if user['role'] == 'Paid User' else 'star' }}"></i> {{ user['role'] }}
+                <span class="brand-text">AI Hub</span>
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+                <a href="{{ url_for('summarize') }}" class="nav-link">Summarize</a>
+                <a href="{{ url_for('tts') }}" class="nav-link">Text to Speech</a>
+                <a href="{{ url_for('stt') }}" class="nav-link">Speech to Text</a>
+                <a href="{{ url_for('ocr') }}" class="nav-link">OCR</a>
+                <a href="{{ url_for('profile') }}" class="nav-link active">Profile</a>
             </div>
         </div>
+    </nav>
 
-        <div class="info-section">
-            <div class="section-title">
-                <i class="fas fa-info-circle"></i> Account Information
-            </div>
-            <div class="info-grid">
-                <div class="info-item">
-                    <div class="info-icon"><i class="fas fa-user"></i></div>
-                    <div class="info-content">
-                        <div class="info-label">Full Name</div>
-                        <div class="info-value">{{ user['name'] }}</div>
+    <!-- Page Container -->
+    <div class="page-container">
+        <div class="profile-wrapper">
+            <div class="profile-grid">
+                
+                <!-- Left Sidebar -->
+                <div class="profile-sidebar">
+                    <div class="profile-avatar-container">
+                        {% if user['profile_image'] %}
+                            <img src="{{ url_for('static', filename='uploads/' + user['profile_image']) }}" class="profile-avatar" alt="Profile">
+                        {% else %}
+                            <div class="profile-avatar-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                        <div class="avatar-edit-overlay" onclick="alert('Profile picture upload coming soon!')">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+
+                    <div class="profile-name">{{ user['name'] }}</div>
+                    <div class="profile-email">{{ user['email'] }}</div>
+                    <div class="profile-role-badge {{ 'badge-paid' if user['role'] == 'Paid User' else 'badge-free' }}">
+                        <i class="fas fa-{{ 'crown' if user['role'] == 'Paid User' else 'star' }}"></i>
+                        {{ user['role'] }}
+                    </div>
+
+                    <div class="profile-divider"></div>
+
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-calendar"></i>
+                                Member Since
+                            </div>
+                            <div class="stat-value">{{ user['created_at'][:10] }}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">
+                                <i class="fas fa-shield"></i>
+                                Account Status
+                            </div>
+                            <div class="stat-value" style="color: #4CAF50;">Active</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-actions">
+                        <button class="btn btn-primary" onclick="openEditModal()">
+                            <i class="fas fa-edit"></i>
+                            Edit Profile
+                        </button>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                            <i class="fas fa-th-large"></i>
+                            Dashboard
+                        </a>
+                        <a href="{{ url_for('logout') }}" class="btn btn-danger">
+                            <i class="fas fa-right-from-bracket"></i>
+                            Logout
+                        </a>
                     </div>
                 </div>
-                <div class="info-item">
-                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                    <div class="info-content">
-                        <div class="info-label">Email Address</div>
-                        <div class="info-value">{{ user['email'] }}</div>
+
+                <!-- Right Content -->
+                <div class="profile-content">
+                    
+                    <!-- Activity Stats -->
+                    <div class="content-section">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <i class="fas fa-chart-line"></i>
+                                Activity Overview
+                            </div>
+                        </div>
+                        <div class="activity-grid">
+                            <div class="activity-card">
+                                <div class="activity-number">0</div>
+                                <div class="activity-label">Summaries</div>
+                            </div>
+                            <div class="activity-card">
+                                <div class="activity-number">0</div>
+                                <div class="activity-label">Audio Clips</div>
+                            </div>
+                            <div class="activity-card">
+                                <div class="activity-number">0</div>
+                                <div class="activity-label">Transcripts</div>
+                            </div>
+                            <div class="activity-card">
+                                <div class="activity-number">0</div>
+                                <div class="activity-label">OCR Scans</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="info-item">
-                    <div class="info-icon"><i class="fas fa-calendar"></i></div>
-                    <div class="info-content">
-                        <div class="info-label">Member Since</div>
-                        <div class="info-value">{{ user['created_at'][:10] }}</div>
+
+                    <!-- Account Information -->
+                    <div class="content-section">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <i class="fas fa-info-circle"></i>
+                                Account Information
+                            </div>
+                        </div>
+                        <div class="info-grid">
+                            <div class="info-card">
+                                <div class="info-card-header">
+                                    <div class="info-icon">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="info-label">Full Name</div>
+                                </div>
+                                <div class="info-value">{{ user['name'] }}</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-card-header">
+                                    <div class="info-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="info-label">Email Address</div>
+                                </div>
+                                <div class="info-value">{{ user['email'] }}</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-card-header">
+                                    <div class="info-icon">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                    <div class="info-label">Join Date</div>
+                                </div>
+                                <div class="info-value">{{ user['created_at'][:10] }}</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-card-header">
+                                    <div class="info-icon">
+                                        <i class="fas fa-shield-halved"></i>
+                                    </div>
+                                    <div class="info-label">Account Type</div>
+                                </div>
+                                <div class="info-value">{{ user['role'] }}</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="info-item">
-                    <div class="info-icon"><i class="fas fa-shield-halved"></i></div>
-                    <div class="info-content">
-                        <div class="info-label">Account Status</div>
-                        <div class="info-value" style="color:#4caf50;">Active</div>
+
+                    <!-- Upgrade Section (Free Users Only) -->
+                    {% if user['role'] == 'Free User' %}
+                    <div class="upgrade-section">
+                        <h3><i class="fas fa-rocket"></i> Upgrade to Premium</h3>
+                        <p>Unlock all premium features and supercharge your content transformation workflow</p>
+                        <div class="upgrade-features">
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle"></i>
+                                4 Premium Voices
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle"></i>
+                                Priority Processing
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle"></i>
+                                Advanced Features
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle"></i>
+                                Email Support
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle"></i>
+                                Unlimited Storage
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle"></i>
+                                API Access
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="font-size: 16px; padding: 14px 32px;" onclick="alert('Upgrade feature coming soon! Contact admin@aihub.edu')">
+                            <i class="fas fa-crown"></i>
+                            Upgrade Now - Only $9.99/month
+                        </button>
                     </div>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p><span class="highlight">© 2026 AI Hub</span> - Content Transformation Platform</p>
+            <p>Developed with ❤️ by Rutika Pardhi</p>
+        </footer>
     </div>
 
-    <!-- UPGRADE BOX (Free Users Only) -->
-    {% if user['role'] == 'Free User' %}
-    <div class="upgrade-card">
-        <h3><i class="fas fa-rocket"></i> Upgrade to Premium</h3>
-        <p>Unlock all premium features and take your content transformation to the next level</p>
-        <div class="upgrade-features">
-            <span class="feature-tag"><i class="fas fa-check"></i> 4 Premium Voices</span>
-            <span class="feature-tag"><i class="fas fa-check"></i> Priority Processing</span>
-            <span class="feature-tag"><i class="fas fa-check"></i> Advanced Features</span>
-            <span class="feature-tag"><i class="fas fa-check"></i> Email Support</span>
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-edit"></i> Edit Profile</h3>
+                <p>Update your account information</p>
+            </div>
+            <form method="POST" action="{{ url_for('update_profile') }}">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" name="name" value="{{ user['name'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" name="email" value="{{ user['email'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">New Password (leave blank to keep current)</label>
+                    <input type="password" class="form-input" name="new_password" placeholder="Enter new password">
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">
+                        <i class="fas fa-save"></i>
+                        Save Changes
+                    </button>
+                    <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeEditModal()">
+                        Cancel
+                    </button>
+                </div>
+            </form>
         </div>
-        <button class="btn-upgrade" onclick="alert('Upgrade feature coming soon! Contact admin@aihub.edu')">
-            <i class="fas fa-crown"></i> Upgrade Now - Only $9.99/month
-        </button>
     </div>
-    {% endif %}
 
-    <!-- ACTION BUTTONS -->
-    <div class="action-btns">
-        <button class="btn-action" onclick="openEditModal()">
-            <i class="fas fa-edit"></i> Edit Profile
-        </button>
-        <a href="{{ url_for('dashboard') }}" class="btn-action">
-            <i class="fas fa-th-large"></i> Go to Dashboard
-        </a>
-        <a href="{{ url_for('logout') }}" class="btn-action btn-logout">
-            <i class="fas fa-right-from-bracket"></i> Logout
-        </a>
-    </div>
-</div>
+    <script>
+        function openEditModal() {
+            document.getElementById('editModal').classList.add('active');
+        }
 
-</div>
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+        }
 
-<footer class="dash-footer">
-    <p><span class="f-highlight">© 2025 AI-Powered Content Transformation Hub</span></p>
-    <p>Savitribai Phule Pune University</p>
-</footer>
-
-<!-- EDIT MODAL -->
-<div class="modal-overlay" id="editModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3><i class="fas fa-user-edit"></i> Edit Profile</h3>
-            <p>Update your account information</p>
-        </div>
-        <form method="POST" action="{{ url_for('update_profile') }}">
-            <div class="form-group">
-                <label class="form-label">Full Name</label>
-                <input type="text" class="form-input" name="name" value="{{ user['name'] }}" required>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Email Address</label>
-                <input type="email" class="form-input" name="email" value="{{ user['email'] }}" required>
-            </div>
-            <div class="form-group">
-                <label class="form-label">New Password (leave blank to keep current)</label>
-                <input type="password" class="form-input" name="new_password" placeholder="Enter new password">
-            </div>
-            <div class="modal-actions">
-                <button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Changes</button>
-                <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<script>
-function openEditModal() {
-    document.getElementById('editModal').classList.add('active');
-}
-
-function closeEditModal() {
-    document.getElementById('editModal').classList.remove('active');
-}
-
-// Close modal on outside click
-document.getElementById('editModal').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) closeEditModal();
-});
-</script>
+        // Close modal on outside click
+        document.getElementById('editModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeEditModal();
+        });
+    </script>
 </body>
 </html>
