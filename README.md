@@ -103,25 +103,29 @@ To democratize access to AI-powered content transformation tools, making advance
   
 ![Extract text from Image](images/image16.png)
 
-## ✨ Key Features
+# ✨ Key Features
 
-### 🔐 1. User Authentication & Security
-
-- User Registration & Login  
-- Password hashing using Werkzeug  
-- Email verification system  
-- Forgot password & reset password functionality  
-- Session-based authentication  
-- Profile image upload  
-- Role-based access (Free / Paid User)
----
+## 🔐 1. User Authentication & Security
 
 - Email verification
-  
-![Email verification](images/image17.png)
 
+ <div align="center"> 
+   
+![Email verification](images/image18.png)
 
-### 🧠 2. AI-Powered Features
+ </div>
+
+ - **User Registration** with profile image upload
+- **Secure Login** with password hashing (Werkzeug)
+- **Email Verification** system (ready for integration)
+- **Password Reset** functionality
+- **Session Management** for secure access
+- **Role-Based Access Control** (Free/Paid users)
+- **Profile Management** with editable user information
+
+---
+
+## 🧠 2. AI-Powered Features
 
 #### 📝 Text Summarization
 - Automatically summarizes long text  
@@ -147,13 +151,39 @@ To democratize access to AI-powered content transformation tools, making advance
 
 ---
 
-### 📊 3. User Dashboard
+## 📊 3. User Dashboard
 
 - Clean and responsive dashboard  
 - Animated feature cards  
 - Quick navigation to AI tools  
 - Profile & account management  
 
+## 🛠️ Technology Stack
+
+### Backend
+- **Framework**: Flask 2.3+
+- **Database**: SQLite3
+- **Security**: Werkzeug (Password Hashing)
+- **Session Management**: Flask-Session
+
+### Frontend
+- **HTML5**: Semantic markup
+- **CSS3**: Modern styling with animations
+- **JavaScript**: Interactive functionality
+- **Bootstrap 5.3**: Responsive framework
+- **Font Awesome**: Icon library
+
+### AI & Machine Learning
+- **Text Summarization**: Sumy (LSA Algorithm)
+- **Text-to-Speech**: gTTS (Google Text-to-Speech)
+- **Speech-to-Text**: SpeechRecognition
+- **OCR**: Pytesseract (Tesseract-OCR)
+
+### Additional Libraries
+- **Pillow**: Image processing
+- **pydub**: Audio manipulation
+- **NLTK**: Natural language processing
+- **email-validator**: Email validation
 ---
 
 ## 📁 Project Structure
@@ -190,163 +220,135 @@ ai_hub_project/
 
 ```
 
+
 ## 🚀 Installation & Setup
 
 ### Prerequisites
-- Python 3.7 or higher
-- pip (Python package manager)
 
-### Step 1: Install Dependencies
+Before you begin, ensure you have the following installed:
+- **Python 3.7+** ([Download](https://www.python.org/downloads/))
+- **pip** (Python package manager)
+- **Git** (optional, for cloning)
+
+### Step 1: Clone or Download the Repository
 
 ```bash
-pip install flask
-pip install werkzeug
+# Option 1: Clone with Git
+git clone https://github.com/yourusername/ai-hub.git
+cd ai-hub
+
+# Option 2: Download ZIP and extract
+# Then navigate to the extracted folder
+cd ai-hub-main
 ```
 
-### Step 2: Create Project Structure
+### Step 2: Install Dependencies
 
-Create the following folder structure:
-
-```
-ai_hub_project/
-├── app.py
-├── templates/
-├── static/
-│   ├── css/
-│   ├── js/
-│   ├── images/
-│   └── uploads/
+```bash
+pip install -r requirements.txt
 ```
 
-### Step 3: Copy Files
+**Required packages:**
+```
+Flask==2.3.0
+Werkzeug==2.3.0
+Pillow==10.0.0
+sumy==0.11.0
+nltk==3.8.1
+gTTS==2.3.2
+SpeechRecognition==3.10.0
+pytesseract==0.3.10
+pydub==0.25.1
+email-validator==2.0.0
+```
 
-1. Copy `app.py` to the root directory
-2. Copy all HTML files to `templates/` folder
-3. Copy `style.css` to `static/css/` folder
-4. Copy `main.js` to `static/js/` folder
+### Step 3: Install Tesseract OCR (for OCR feature)
 
-### Step 4: Run the Application
+**Windows:**
+1. Download from: https://github.com/UB-Mannheim/tesseract/wiki
+2. Install and add to PATH
+
+**macOS:**
+```bash
+brew install tesseract
+```
+
+**Linux:**
+```bash
+sudo apt-get install tesseract-ocr
+```
+
+### Step 4: Download NLTK Data (for Summarization)
+
+```python
+python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
+```
+
+### Step 5: Create Required Directories
+
+```bash
+mkdir -p static/uploads static/audio docs/images
+```
+
+### Step 6: Configure Application
+
+Edit `app.py` and update:
+```python
+# Change this in production!
+app.secret_key = 'your-super-secret-key-change-in-production'
+
+# Optional: Configure upload settings
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+```
+
+### Step 7: Run the Application
 
 ```bash
 python app.py
 ```
 
-The application will start at: `http://127.0.0.1:5000/`
-
-## 📝 Usage Guide
-
-### 1. Register an Account
-- Go to `http://127.0.0.1:5000/`
-- Click on "Register here"
-- Fill in your details:
-  - Full Name
-  - Email
-  - Password
-  - Role (Free User / Paid User)
-  - Profile Image (optional)
-- Click "Register"
-
-### 2. Login
-- Enter your email and password
-- Click "Login"
-- You'll be redirected to the dashboard
-
-### 3. Use Features
-
-**Text Summarization:**
-- Click on "Summarization" from navbar or dashboard
-- Paste your long text
-- Click "Generate Summary"
-- View the summarized text
-
-**Text to Speech:**
-- Click on "Text to Speech"
-- Enter your text
-- Select voice (Premium voices for paid users)
-- Click "Convert to Audio"
-
-**Speech to Text:**
-- Click on "Speech to Text"
-- Upload an audio file
-- Click "Convert to Text"
-- View and copy the transcribed text
-
-**OCR:**
-- Click on "OCR"
-- Upload an image
-- Click "Extract Text"
-- View and copy the extracted text
-
-### 4. Profile Management
-- Click on your name in the navbar
-- Select "Profile" from dropdown
-- View your account details
-- Upgrade to premium (UI only)
-
-## 🎨 UI Features
-
-- **Color Scheme**: Yellow (#f5c518) and Black (#0f0f0f)
-- **Responsive Design**: Works on all devices
-- **Smooth Animations**: Hover effects and transitions
-- **Modern Cards**: Rounded corners with yellow borders
-- **Clean Layout**: Easy to navigate
-- **Bootstrap Icons**: Professional icon set
-
-## 🔐 Security Features
-
-- Password hashing using werkzeug
-- Session-based authentication
-- Secure file uploads
-- SQL injection prevention
-
-## 📊 Database Schema
-
-### Users Table
-```sql
-CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    role TEXT DEFAULT 'Free User',
-    profile_image TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+**Success!** The application should now be running at:
+```
+🌐 http://127.0.0.1:5000/
 ```
 
-## 🛠️ Customization
+### Step 8: Create First Account
 
-### Change Secret Key
-In `app.py`, update:
-```python
-app.secret_key = 'your-secret-key-change-this-in-production'
-```
+1. Navigate to `http://127.0.0.1:5000/`
+2. Click "Get Started" or "Register"
+3. Fill in your details
+4. Start using AI Hub!
 
-### Change Colors
-In `static/css/style.css`, modify:
-```css
-:root {
-    --primary-yellow: #f5c518;
-    --dark-bg: #0f0f0f;
-    --card-bg: #1a1a1a;
-}
-```
+---
 
-### Add Real AI APIs
-The current implementation uses placeholder logic. To add real AI features:
+## 🔗 API Endpoints
 
-1. **For TTS**: Use Google Cloud TTS, Amazon Polly, or gTTS
-2. **For STT**: Use Google Cloud Speech-to-Text or Assembly AI
-3. **For OCR**: Use Tesseract, Google Vision API, or Azure Computer Vision
-4. **For Summarization**: Use OpenAI API, Hugging Face, or custom models
+### Authentication Routes
 
-## 📌 Important Notes
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/` | Landing page | No |
+| GET/POST | `/register` | User registration | No |
+| GET/POST | `/login` | User login | No |
+| GET | `/logout` | User logout | Yes |
+| GET/POST | `/forgot-password` | Password recovery | No |
+| GET/POST | `/reset-password/<token>` | Reset password | No |
 
-1. **Database**: `database.db` is created automatically on first run
-2. **Uploads**: Profile images are stored in `static/uploads/`
-3. **File Size**: Max upload size is 16MB
-4. **AI Features**: Currently use placeholder logic for demonstration
-5. **Production**: Change secret key and add proper security measures
+### Feature Routes
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/dashboard` | User dashboard | Yes |
+| GET | `/profile` | User profile | Yes |
+| POST | `/update-profile` | Update profile | Yes |
+| GET/POST | `/summarize` | Text summarization | Yes |
+| GET/POST | `/tts` | Text-to-speech | Yes |
+| GET/POST | `/stt` | Speech-to-text | Yes |
+| GET/POST | `/ocr` | OCR processing | Yes |
+
+---
+
+
 
 ## 🐛 Troubleshooting
 
@@ -373,26 +375,97 @@ The current implementation uses placeholder logic. To add real AI features:
 - [ ] Export features
 - [ ] Multi-language support
 
-## 👨‍💻 Development
+## 👥 Contributing
 
-This project is designed for college submissions and learning purposes. The code is:
-- Well-commented
-- Easy to understand
-- Beginner-friendly
-- Ready for demonstrations
+We welcome contributions from the community! Here's how you can help:
+
+### How to Contribute
+
+1. **Fork the Repository**
+   ```bash
+   git clone https://github.com/yourusername/ai-hub.git
+   ```
+
+2. **Create a Feature Branch**
+   ```bash
+   git checkout -b feature/AmazingFeature
+   ```
+
+3. **Make Your Changes**
+   - Write clean, commented code
+   - Follow existing code style
+   - Test your changes thoroughly
+
+4. **Commit Your Changes**
+   ```bash
+   git commit -m "Add some AmazingFeature"
+   ```
+
+5. **Push to Branch**
+   ```bash
+   git push origin feature/AmazingFeature
+   ```
+
+6. **Open a Pull Request**
+   - Describe your changes
+   - Reference any related issues
+   - Wait for review
+
+### Contribution Guidelines
+
+- Follow PEP 8 style guide for Python
+- Write meaningful commit messages
+- Add comments for complex logic
+- Update documentation as needed
+- Test before submitting PR
+
+### Code of Conduct
+
+- Be respectful and inclusive
+- Accept constructive criticism
+- Focus on what's best for the community
+- Show empathy towards others
+
+---
 
 ## 📄 License
 
-This project is developed strictly for educational purposes under Savitribai Phule Pune University curriculum.
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-## 🤝 Support
+```
+MIT License
 
-For any issues or questions, please refer to:
-- Flask documentation: https://flask.palletsprojects.com/
-- Bootstrap documentation: https://getbootstrap.com/
-- SQLite documentation: https://www.sqlite.org/
+Copyright (c) 2026 Rushikesh Narawade
 
-## ❤️ Acknowledgment
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+---
+
+## 🙏 Acknowledgments
+
+### Special Thanks
+
+- **Flask Community** - Excellent framework and documentation
+- **Open Source Contributors** - For amazing libraries and tools
+- **Beta Testers** - For valuable feedback and bug reports
+
 
 - Created with passion and dedication for academic learning and real-world AI exposure.
 ---
