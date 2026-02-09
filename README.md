@@ -1,69 +1,103 @@
 # 🤖 AI-Powered Content Transformation Hub
 
-A modern, full-stack web application that provides AI-powered content transformation features such as Text Summarization, Text-to-Speech, Speech-to-Text, and OCR, along with secure user authentication and profile management.
+A modern, full-stack web application that provides AI-powered content transformation features such as **Text Summarization, Text-to-Speech, Speech-to-Text, and OCR**, along with secure user authentication and profile management.
+
+---
 
 ## 🎓 Academic Project Details
 
-**Project Type**: Mini / Major Academic Project
+- **University:** Savitribai Phule Pune University (SPPU)
+- **Project Type:** Mini / Major Academic Project
+- **Technology Stack:**
+  - **Backend:** Python (Flask)
+  - **Frontend:** HTML5, CSS3, Bootstrap 5
+  - **Database:** SQLite
+  - **AI Libraries:** Sumy, gTTS, SpeechRecognition, Pytesseract
+- **UI Theme:** Modern Yellow & Black Premium Design
 
-**Technology Stack**:
-
-**Backend**: Python (Flask)
-
-**Frontend**: HTML5, CSS3, Bootstrap 5
-
-**Database**: SQLite
-
-**AI Libraries**: Sumy, gTTS, SpeechRecognition, Pytesseract
-
-**UI Theme**: Modern Yellow & Black Premium Design
+---
 
 ## ✨ Key Features
 
-1. **🔐 User Authentication & Security**
-   - Register with email and password
-   - Secure login system
-   - Profile image upload
-   - Free and Paid user roles
+### 🔐 1. User Authentication & Security
 
-2. **AI Features**
-   - **Text Summarization**: Transform long texts into concise summaries
-   - **Text to Speech**: Convert text into audio
-   - **Speech to Text**: Transcribe audio files to text
-   - **OCR**: Extract text from images
+- User Registration & Login  
+- Password hashing using Werkzeug  
+- Email verification system  
+- Forgot password & reset password functionality  
+- Session-based authentication  
+- Profile image upload  
+- Role-based access (Free / Paid User)
 
-3. **User Dashboard**
-   - Clean, modern interface
-   - Feature cards with hover animations
-   - Profile management
-   - Role-based access
+---
+
+### 🧠 2. AI-Powered Features
+
+#### 📝 Text Summarization
+- Automatically summarizes long text  
+- Uses intelligent sentence selection  
+- Supports different text lengths  
+
+#### 🔊 Text-to-Speech (TTS)
+- Converts text into downloadable audio  
+- Multiple voice options  
+- Premium voices for Paid users  
+- Audio files auto-managed  
+
+#### 🎙️ Speech-to-Text (STT)
+- Upload audio files  
+- Converts speech into text  
+- Supports multiple audio formats  
+- Automatic WAV conversion  
+
+#### 🖼️ Optical Character Recognition (OCR)
+- Upload images  
+- Extracts readable text using Tesseract OCR  
+- Handles clear printed text accurately  
+
+---
+
+### 📊 3. User Dashboard
+
+- Clean and responsive dashboard  
+- Animated feature cards  
+- Quick navigation to AI tools  
+- Profile & account management  
+
+---
 
 ## 📁 Project Structure
 
 ```
 ai_hub_project/
+├── app.py                              # Main Flask application
+├── database.db                         # SQLite database (auto-created)
+├── README.md                           # Project documentation
+├── email_verification_template.html    # Email verification template
+├── password_reset_template.html        # Password reset email template
 │
-├── app.py                 # Main Flask application
-├── database.db           # SQLite database (auto-created)
-├── README.md             # This file
-│
-├── templates/            # HTML templates
-│   ├── login.html
+├── templates/
+│   ├── index.html
 │   ├── register.html
+│   ├── login.html
+│   ├── verify_email.html
+│   ├── forgot_password.html
+│   ├── reset_password.html
 │   ├── dashboard.html
+│   ├── profile.html
 │   ├── summarize.html
 │   ├── tts.html
 │   ├── stt.html
-│   ├── ocr.html
-│   └── profile.html
+│   └── ocr.html
 │
-└── static/              # Static files
-    ├── css/
-    │   └── style.css    # Custom styles
-    ├── js/
-    │   └── main.js      # JavaScript functions
-    ├── images/          # Static images
-    └── uploads/         # User uploaded files
+└── static/
+    ├── uploads/                        # User uploads (auto-created)
+    ├── audio/                          # Generated TTS audio (auto-created)
+    ├── images/
+    │   └── login_.png                  # Background image
+    └── css/
+        └── style.css                   # Custom styles
+
 ```
 
 ## 🚀 Installation & Setup
@@ -259,7 +293,7 @@ This project is designed for college submissions and learning purposes. The code
 
 ## 📄 License
 
-This project is created for educational purposes.
+This project is developed strictly for educational purposes under Savitribai Phule Pune University curriculum.
 
 ## 🤝 Support
 
@@ -269,5 +303,6 @@ For any issues or questions, please refer to:
 - SQLite documentation: https://www.sqlite.org/
 
 ---
+## ❤️ Acknowledgment
 
-**Created with ❤️ for Savitribai Phule Pune University**
+Created with passion and dedication for academic learning and real-world AI exposure.
