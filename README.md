@@ -1,15 +1,26 @@
-# AI-Powered Content Transformation Hub
+# 🤖 AI-Powered Content Transformation Hub
 
-A modern web application for AI-powered content transformation with features like text summarization, text-to-speech, speech-to-text, and OCR.
+A modern, full-stack web application that provides AI-powered content transformation features such as Text Summarization, Text-to-Speech, Speech-to-Text, and OCR, along with secure user authentication and profile management.
 
-## 🎓 Academic Project
-**University:** Savitribai Phule Pune University  
-**Tech Stack:** Python Flask, SQLite, Bootstrap 5  
-**Theme:** Modern Yellow & Black Premium UI
+## 🎓 Academic Project Details
 
-## ✨ Features
+**Project Type**: Mini / Major Academic Project
 
-1. **User Authentication**
+**Technology Stack**:
+
+**Backend**: Python (Flask)
+
+**Frontend**: HTML5, CSS3, Bootstrap 5
+
+**Database**: SQLite
+
+**AI Libraries**: Sumy, gTTS, SpeechRecognition, Pytesseract
+
+**UI Theme**: Modern Yellow & Black Premium Design
+
+## ✨ Key Features
+
+1. **🔐 User Authentication & Security**
    - Register with email and password
    - Secure login system
    - Profile image upload
