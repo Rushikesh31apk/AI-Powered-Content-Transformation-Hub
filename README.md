@@ -17,19 +17,6 @@ A modern, full-stack web application that provides AI-powered content transforma
 
 ---
 
-## 🎓 Academic Project Details
-
-- **University:** Savitribai Phule Pune University (SPPU)
-- **Project Type:** Mini / Major Academic Project
-- **Technology Stack:**
-  - **Backend:** Python (Flask)
-  - **Frontend:** HTML5, CSS3, Bootstrap 5
-  - **Database:** SQLite
-  - **AI Libraries:** Sumy, gTTS, SpeechRecognition, Pytesseract
-- **UI Theme:** Modern Yellow & Black Premium Design
-
----
-
 ## ✨ Key Features
 
 ### 🔐 1. User Authentication & Security
