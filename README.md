@@ -302,7 +302,7 @@ For any issues or questions, please refer to:
 - Bootstrap documentation: https://getbootstrap.com/
 - SQLite documentation: https://www.sqlite.org/
 
----
 ## ❤️ Acknowledgment
 
-Created with passion and dedication for academic learning and real-world AI exposure.
+- Created with passion and dedication for academic learning and real-world AI exposure.
+---
