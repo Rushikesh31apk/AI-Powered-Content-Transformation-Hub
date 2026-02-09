@@ -51,6 +51,30 @@ To democratize access to AI-powered content transformation tools, making advance
   
 ![Features](images/image2.png)
 
+- Technology
+  
+![Technology](images/image5.png)
+
+- Login
+  
+![Login](images/image6.png)
+
+- Register
+  
+![Register](images/image7.png)
+
+- Dashboard
+  
+![Dashboard](images/image8.png)
+
+- Tools
+  
+![Tools](images/image9.png)
+
+- Profile
+  
+![Profile](images/image17.png)
+
 
 ## ✨ Key Features
 
