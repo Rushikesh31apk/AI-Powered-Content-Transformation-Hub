@@ -42,7 +42,7 @@ To democratize access to AI-powered content transformation tools, making advance
 
 ---
 
-## Images
+## Website Screenshots
 - Home page
   
 ![Home](images/image1.png)
