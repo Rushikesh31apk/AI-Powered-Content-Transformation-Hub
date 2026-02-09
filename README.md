@@ -1,69 +1,110 @@
 # 🤖 AI-Powered Content Transformation Hub
 
-A modern, full-stack web application that provides AI-powered content transformation features such as Text Summarization, Text-to-Speech, Speech-to-Text, and OCR, along with secure user authentication and profile management.
+A modern, full-stack web application that provides AI-powered content transformation features such as **Text Summarization, Text-to-Speech, Speech-to-Text, and OCR**, along with secure user authentication and profile management.
 
-## 🎓 Academic Project Details
+<div align="center">
 
-**Project Type**: Mini / Major Academic Project
+[![Python](https://img.shields.io/badge/Python-3.7+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-2.3+-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-**Technology Stack**:
+[![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Sumy](https://img.shields.io/badge/Sumy-Text%20Summarization-FFD700?style=for-the-badge)](https://pypi.org/project/sumy/)
+[![gTTS](https://img.shields.io/badge/gTTS-Text%20to%20Speech-34A853?style=for-the-badge&logo=google)](https://pypi.org/project/gTTS/)
+[![SpeechRecognition](https://img.shields.io/badge/SpeechRecognition-Audio%20Processing-FF6F00?style=for-the-badge)](https://pypi.org/project/SpeechRecognition/)
+[![Pytesseract](https://img.shields.io/badge/Pytesseract-OCR-000000?style=for-the-badge)](https://pypi.org/project/pytesseract/)
+[![Werkzeug](https://img.shields.io/badge/Werkzeug-Security-CC0000?style=for-the-badge)](https://werkzeug.palletsprojects.com/)
 
-**Backend**: Python (Flask)
+[Features](#-key-features) • [Installation](#-installation--setup) • [Usage](#-usage-guide) • [Screenshots](#-project-screenshots) • [Documentation](#-documentation)
 
-**Frontend**: HTML5, CSS3, Bootstrap 5
+</div>
 
-**Database**: SQLite
-
-**AI Libraries**: Sumy, gTTS, SpeechRecognition, Pytesseract
-
-**UI Theme**: Modern Yellow & Black Premium Design
+---
 
 ## ✨ Key Features
 
-1. **🔐 User Authentication & Security**
-   - Register with email and password
-   - Secure login system
-   - Profile image upload
-   - Free and Paid user roles
+### 🔐 1. User Authentication & Security
 
-2. **AI Features**
-   - **Text Summarization**: Transform long texts into concise summaries
-   - **Text to Speech**: Convert text into audio
-   - **Speech to Text**: Transcribe audio files to text
-   - **OCR**: Extract text from images
+- User Registration & Login  
+- Password hashing using Werkzeug  
+- Email verification system  
+- Forgot password & reset password functionality  
+- Session-based authentication  
+- Profile image upload  
+- Role-based access (Free / Paid User)
 
-3. **User Dashboard**
-   - Clean, modern interface
-   - Feature cards with hover animations
-   - Profile management
-   - Role-based access
+---
+
+### 🧠 2. AI-Powered Features
+
+#### 📝 Text Summarization
+- Automatically summarizes long text  
+- Uses intelligent sentence selection  
+- Supports different text lengths  
+
+#### 🔊 Text-to-Speech (TTS)
+- Converts text into downloadable audio  
+- Multiple voice options  
+- Premium voices for Paid users  
+- Audio files auto-managed  
+
+#### 🎙️ Speech-to-Text (STT)
+- Upload audio files  
+- Converts speech into text  
+- Supports multiple audio formats  
+- Automatic WAV conversion  
+
+#### 🖼️ Optical Character Recognition (OCR)
+- Upload images  
+- Extracts readable text using Tesseract OCR  
+- Handles clear printed text accurately  
+
+---
+
+### 📊 3. User Dashboard
+
+- Clean and responsive dashboard  
+- Animated feature cards  
+- Quick navigation to AI tools  
+- Profile & account management  
+
+---
 
 ## 📁 Project Structure
 
 ```
 ai_hub_project/
+├── app.py                              # Main Flask application
+├── database.db                         # SQLite database (auto-created)
+├── README.md                           # Project documentation
+├── email_verification_template.html    # Email verification template
+├── password_reset_template.html        # Password reset email template
 │
-├── app.py                 # Main Flask application
-├── database.db           # SQLite database (auto-created)
-├── README.md             # This file
-│
-├── templates/            # HTML templates
-│   ├── login.html
+├── templates/
+│   ├── index.html
 │   ├── register.html
+│   ├── login.html
+│   ├── verify_email.html
+│   ├── forgot_password.html
+│   ├── reset_password.html
 │   ├── dashboard.html
+│   ├── profile.html
 │   ├── summarize.html
 │   ├── tts.html
 │   ├── stt.html
-│   ├── ocr.html
-│   └── profile.html
+│   └── ocr.html
 │
-└── static/              # Static files
-    ├── css/
-    │   └── style.css    # Custom styles
-    ├── js/
-    │   └── main.js      # JavaScript functions
-    ├── images/          # Static images
-    └── uploads/         # User uploaded files
+└── static/
+    ├── uploads/                        # User uploads (auto-created)
+    ├── audio/                          # Generated TTS audio (auto-created)
+    ├── images/
+    │   └── login_.png                  # Background image
+    └── css/
+        └── style.css                   # Custom styles
+
 ```
 
 ## 🚀 Installation & Setup
@@ -259,7 +300,7 @@ This project is designed for college submissions and learning purposes. The code
 
 ## 📄 License
 
-This project is created for educational purposes.
+This project is developed strictly for educational purposes under Savitribai Phule Pune University curriculum.
 
 ## 🤝 Support
 
@@ -268,6 +309,7 @@ For any issues or questions, please refer to:
 - Bootstrap documentation: https://getbootstrap.com/
 - SQLite documentation: https://www.sqlite.org/
 
----
+## ❤️ Acknowledgment
 
-**Created with ❤️ for Savitribai Phule Pune University**
+- Created with passion and dedication for academic learning and real-world AI exposure.
+---
